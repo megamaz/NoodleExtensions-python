@@ -94,7 +94,7 @@ def OpenLevel(wipLevelFolder, difficulty, charact='Standard'):
             with open(f'{diffic_path}{charact}.dat', 'r') as GetDiff:
                 return json.load(GetDiff)
 print('''
-PPPPPPPPPPPPPPPPP   NNNNNNNN        NNNNNNNNEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+Python PPPPPPPPPP   Noodle N        NNNNNNNNExtensions EEEEEEEEEEEEditor EEEEEEEEEEEEEEE
 P::::::::::::::::P  N:::::::N       N::::::NE::::::::::::::::::::EE::::::::::::::::::::E
 P::::::PPPPPP:::::P N::::::::N      N::::::NE::::::::::::::::::::EE::::::::::::::::::::E
 PP:::::P     P:::::PN:::::::::N     N::::::NEE::::::EEEEEEEEE::::EEE::::::EEEEEEEEE::::E
