@@ -18,11 +18,8 @@
 # Python Noodle Extensions Editor. (Great name, I know.) I can't do ASCII, so I used http://patorjk.com/software/taag/#p=testall&h=0&v=0&f=Alpha&t=PNEE "Doh" (Pronounced the same as Knee, /nē/)
 # This code is awfully simple. Please improve it.
 
-import json, argparse, os
+import json, os
 from pathlib import Path
-setupParser = argparse.ArgumentParser(description='Setup')
-setupParser.add_argument('--setup', action='store_true', help='Sets up the project')
-args = setupParser.parse_args()
 def GetLocalPath(filename):
     return Path(__file__).parents[0] / filename
 
@@ -39,16 +36,11 @@ def Setup():
                 "NoodleExtensionsLevels":[]
             }
 
-            print("Everything has been setup. Please restart the project.")
             json.dump(data, CreateWrite)
     return data
 
-if args.setup:
-    if not os.path.exists(GetLocalPath('data.json')):
-        data = Setup()
-    else:
-        os.remove(GetLocalPath('data.json')) # Delete the file and do setup again.
-        data = Setup()
+if not os.path.exists(GetLocalPath('data.json')):
+    data = Setup()
 else:
     with open(GetLocalPath('data.json'), 'r') as f:
         data = json.load(f)
@@ -117,3 +109,4 @@ PPPPPPPPPP          NNNNNNNN         NNNNNNNEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
 
 A Python based Beat Saber Noodle Extensions Editor (Python Noodle Extensions Editor)
 ''')
+input("anything to exit")
