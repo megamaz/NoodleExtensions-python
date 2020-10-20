@@ -79,18 +79,19 @@ def OpenLevel(wipLevelFolder, difficulty, charact='Standard'):
                                 break
             json.dump(reqs, AddReq)
         
-        if not os.path.exists(rf'{data["CustomWIPLevelsPath"]}\{wipLevelFolder}\{difficulty}{charact}.dat'):
-            if not os.path.exists(rf'{data["CustomWIPLevelsPath"]}\{wipLevelFolder}\{difficulty}.dat'):
-                if not os.path.exists(rf'{data["CustomWIPLevelsPath"]}\{wipLevelFolder}\{difficulty}Standard.dat'):
+        diffic_path = rf'{data["CustomWIPLevelsPath"]}\{wipLevelFolder}\{difficulty}'
+        if not os.path.exists(f'{diffic_path}{charact}.dat'):
+            if not os.path.exists(f'{diffic_path}.dat'):
+                if not os.path.exists(f'{diffic_path}Standard.dat'):
                     raise FileNotFoundError("This difficulty does not exist.")
                 else:
-                    with open(rf'{data["CustomWIPLevelsPath"]}\{wipLevelFolder}\{difficulty}Standard.dat', 'r') as GetDiff:
+                    with open(f'{diffic_path}Standard.dat', 'r') as GetDiff:
                         return json.load(GetDiff)
             else:
-                with open(rf'{data["CustomWIPLevelsPath"]}\{wipLevelFolder}\{difficulty}.dat', 'r') as GetDiff:
+                with open(f'{diffic_path}.dat', 'r') as GetDiff:
                     return json.load(GetDiff)
         else:
-            with open(rf'{data["CustomWIPLevelsPath"]}\{wipLevelFolder}\{difficulty}{charact}.dat', 'r') as GetDiff:
+            with open(f'{diffic_path}{charact}.dat', 'r') as GetDiff:
                 return json.load(GetDiff)
 print('''
 PPPPPPPPPPPPPPPPP   NNNNNNNN        NNNNNNNNEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
