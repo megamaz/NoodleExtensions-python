@@ -24,26 +24,29 @@ def GetLocalPath(filename):
     return Path(__file__).parents[0] / filename
 
 # Setup area
-def Setup():
-    with open(GetLocalPath('data.json'), 'w') as CreateWrite:
-        if not os.path.exists(r'C:\Program Files (x86)\Steam\steamapps\common\Beat Saber'):
-            raise FileNotFoundError("Beat Saber is not installed on this PC.")
-        elif not os.path.exists(r'C:\Program Files (x86)\Steam\steamapps\common\Beat Saber\Plugins\NoodleExtensions.dll'):
-            raise FileNotFoundError("Noodle Extensions addon is not installed on this PC. It can be found here: https://github.com/Aeroluna/NoodleExtensions/releases")
-        else: # if both NoodleExtensions and Beat Saber are downloaded then no check for CustomWIPLevels / CustomLevels
+needs_setup = not os.path.exists(GetLocalPath('data.json'))
+
+if needs_setup:
+    while needs_setup:
+        install_loc = input("Insert Beat Saber install location: ")
+        while not os.path.exists(install_loc):
+            print("This folder does not exist. ")
+            install_loc = input("Insert Beat Saber install location: ")
+        
+        if not os.path.exists(install_loc + '\\Beat Saber.exe'): # bad way to check, but at least it works.
+            print("that is not a beat saber install directory.")
+        
+        else:
             data = {
-                "CustomWIPLevelsPath":r'C:\Program Files (x86)\Steam\steamapps\common\Beat Saber\Beat Saber_Data\CustomWIPLevels',
-                "NoodleExtensionsLevels":[]
+                'CustomWIPLevelsPath':install_loc + '\\BeatSaber_data\\CustomWIPLevels',
+                'NoodleExtensionsLevels':[]
             }
-
-            json.dump(data, CreateWrite)
-    return data
-
-if not os.path.exists(GetLocalPath('data.json')):
-    data = Setup()
-else:
-    with open(GetLocalPath('data.json'), 'r') as f:
-        data = json.load(f)
+            with open(GetLocalPath('data.json'), 'w') as SetupData:
+                json.dump(data, SetupData)
+                print("Setup Successfull.")
+                needs_setup = False
+with open(GetLocalPath('data.json'), 'r') as GetData:
+    data = json.load(GetData)
 # Editor time!
 def OpenLevel(wipLevelFolder, difficulty, charact='Standard'):
     # Found out lately that functions use MarkDown for their description. I'm a god now.
@@ -109,4 +112,3 @@ PPPPPPPPPP          NNNNNNNN         NNNNNNNEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
 
 A Python based Beat Saber Noodle Extensions Editor (Python Noodle Extensions Editor)
 ''')
-input("anything to exit")
