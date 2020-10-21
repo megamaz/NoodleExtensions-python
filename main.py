@@ -20,6 +20,7 @@
 
 import json, os
 from pathlib import Path
+from colorama import Fore, Back, Style 
 def GetLocalPath(filename):
     return Path(__file__).parents[0] / filename
 
@@ -38,7 +39,7 @@ if needs_setup:
         
         else:
             data = {
-                'CustomWIPLevelsPath':install_loc + '\\BeatSaber_data\\CustomWIPLevels',
+                'CustomWIPLevelsPath':install_loc + '\\Beat Saber_data\\CustomWIPLevels',
                 'NoodleExtensionsLevels':[]
             }
             with open(GetLocalPath('data.json'), 'w') as SetupData:
@@ -82,10 +83,10 @@ def OpenLevel(wipLevelFolder, difficulty, charact='Standard'):
         diffic_path = rf'{data["CustomWIPLevelsPath"]}\{wipLevelFolder}\{difficulty}'
         if not os.path.exists(f'{diffic_path}{charact}.dat'):
             if not os.path.exists(f'{diffic_path}.dat'):
-                if not os.path.exists(f'{diffic_path}Standard.dat'):
+                if not os.path.exists(f'{diffic_path}{charact}.dat'):
                     raise FileNotFoundError("This difficulty does not exist.")
                 else:
-                    with open(f'{diffic_path}Standard.dat', 'r') as GetDiff:
+                    with open(f'{diffic_path}{charact}.dat', 'r') as GetDiff:
                         return json.load(GetDiff)
             else:
                 with open(f'{diffic_path}.dat', 'r') as GetDiff:
@@ -93,8 +94,20 @@ def OpenLevel(wipLevelFolder, difficulty, charact='Standard'):
         else:
             with open(f'{diffic_path}{charact}.dat', 'r') as GetDiff:
                 return json.load(GetDiff)
-print('''
-Python PPPPPPPPPP   Noodle N        NNNNNNNNExtensions EEEEEEEEEEEEditor EEEEEEEEEEEEEEE
+
+# User Interface (UI) or rather, the actual editor the user will be using to animate and stuff. 
+# I have absoluetely no idea how to start this.
+def Editor(leveldata):
+    '''
+    The actual editor where the user will be able to... well edit.
+    - leveldata\n
+    The data gained from `OpenLevel`
+    - levelpath\n
+    The level difficulty path. not the folder, the difficulty (StandardExpertPlus.dat)
+    '''
+
+print(Fore.GREEN + '''
+PPPPPPPPPPPPPPPPP   NNNNNNNN        NNNNNNNNEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
 P::::::::::::::::P  N:::::::N       N::::::NE::::::::::::::::::::EE::::::::::::::::::::E
 P::::::PPPPPP:::::P N::::::::N      N::::::NE::::::::::::::::::::EE::::::::::::::::::::E
 PP:::::P     P:::::PN:::::::::N     N::::::NEE::::::EEEEEEEEE::::EEE::::::EEEEEEEEE::::E
@@ -109,7 +122,34 @@ PP:::::P     P:::::PN:::::::::N     N::::::NEE::::::EEEEEEEEE::::EEE::::::EEEEEE
 PP::::::PP          N::::::N      N::::::::NEE::::::EEEEEEEE:::::EEE::::::EEEEEEEE:::::E
 P::::::::P          N::::::N       N:::::::NE::::::::::::::::::::EE::::::::::::::::::::E
 P::::::::P          N::::::N        N::::::NE::::::::::::::::::::EE::::::::::::::::::::E
-PPPPPPPPPP          NNNNNNNN         NNNNNNNEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE    
+PPPPPPPPPP          NNNNNNNN         NNNNNNNEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE 
 
 A Python based Beat Saber Noodle Extensions Editor (Python Noodle Extensions Editor)
 ''')
+level = input(Fore.WHITE + "Insert level name: ")
+if not os.path.exists(data["CustomWIPLevelsPath"] + f'\\{level}'):
+    match = False
+    matches = []
+    for x in os.listdir(data["CustomWIPLevelsPath"]):
+        if level in x:
+            match = True
+            matches.append(x)
+    if match:
+        print("Could not find the level you were looking for. Here are a few matches, however:")
+        for y in range(len(matches)):
+            print(f'{y+1}. {matches[y]} ')
+        print("Insert the number to quickly open that level")
+        try:
+            level = int(input(''))
+
+        except:
+            raise TypeError("Not a number.")
+
+        if level > len(matches):
+            raise OverflowError("Item exited the bounds of the level list.")
+        else:
+            diff =input("Insert Difficulty (ExpertPlus, not Expert+)")
+            print("Loading Level...")
+            EditorLevel = OpenLevel(matches[level-1], difficulty=diff) # This will assume you're editing in Standard mode. 
+            print("Loading UI...")
+            Editor(EditorLevel)
