@@ -27,7 +27,7 @@ Upon first starting up PNEE, You'll be greeted with a screen that hopefully look
 
 Install locations are listed here:
 - **Steam**: `C:\Program Files (x86)\Steam\steamapps\common\Beat Saber`
-- **Oculus**: `C:\OculusApps\Software\hyperbolic-magnematism-beat-saber`
+- **Oculus**: `C:\OculusApps\Software\hyperbolic-magnematism-beat-saber`\
 Anywhere else would be custom, just input that into it.
 
 ## PNEE Basics
