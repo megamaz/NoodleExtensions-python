@@ -20,7 +20,6 @@
 
 import json, os
 from pathlib import Path
-from colorama import Fore, Back, Style 
 def GetLocalPath(filename):
     return Path(__file__).parents[0] / filename
 
@@ -48,6 +47,12 @@ if needs_setup:
                 needs_setup = False
 with open(GetLocalPath('data.json'), 'r') as GetData:
     data = json.load(GetData)
+
+
+if not os.path.exists(GetLocalPath('levels.json')): # Since if you don't have a levels.json, it would mean your first time using the editor (they contain info such as tracks)
+    with open(GetLocalPath('levels.json'), 'w') as create:
+        json.dump({}, create)
+        print("First time using the editor! Welcome! Documentation found on the GitHub as the README.md (https://github.com/megamaz/NoodleExtensions-python/blob/master/README.md)")
 # Editor time!
 def OpenLevel(wipLevelFolder, difficulty, charact='Standard'):
     # Found out lately that functions use MarkDown for their description. I'm a god now.
@@ -96,7 +101,9 @@ def OpenLevel(wipLevelFolder, difficulty, charact='Standard'):
                 return json.load(GetDiff)
 
 # User Interface (UI) or rather, the actual editor the user will be using to animate and stuff. 
-# I have absoluetely no idea how to start this.
+
+# The editor isn't an actual 3D thing or whatever. It's a CMD - although it quickly gets annoying
+# To edit, at least it's faster than manually editing a JSON file. 
 def Editor(leveldata):
     '''
     The actual editor where the user will be able to... well edit.
@@ -105,8 +112,54 @@ def Editor(leveldata):
     - levelpath\n
     The level difficulty path. not the folder, the difficulty (StandardExpertPlus.dat)
     '''
+    actions = 'newtrack editblock'.split()
+    actionsHelp = '''
+- NewTrack
+Creates a new track to put blocks in.
+- EditBlock
+Edits a block (will have subactions show up)
+-Save
+Saves the file. DONT FORGET TO SAVE!!'''
+    with open(GetLocalPath('levels.json'), 'r') as getlevels:
+        levels = json.load(getlevels)
+    blocks = [
+        [
+            '^',
+            'V',
+            '<',
+            '>',
+            '┐',
+            '┌',
+            '└',
+            '┘',
+            'o'
+        ],
+        [
+             '^',
+             'V',
+             '<',
+             '>',
+             '┐',
+             '┌',
+             '└',
+             '┘',
+             'o'   
+        ],
+        " ",
+        "☼"
+    ]
+    while True:
+        action = input("Insert Action (help to see list): ").lower()
+        if action not in actions:
+            print("Not an action.")
+            continue
 
-print(Fore.GREEN + '''
+
+
+
+
+
+print(f'''
 PPPPPPPPPPPPPPPPP   NNNNNNNN        NNNNNNNNEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
 P::::::::::::::::P  N:::::::N       N::::::NE::::::::::::::::::::EE::::::::::::::::::::E
 P::::::PPPPPP:::::P N::::::::N      N::::::NE::::::::::::::::::::EE::::::::::::::::::::E
@@ -126,30 +179,32 @@ PPPPPPPPPP          NNNNNNNN         NNNNNNNEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
 
 A Python based Beat Saber Noodle Extensions Editor (Python Noodle Extensions Editor)
 ''')
-level = input(Fore.WHITE + "Insert level name: ")
-if not os.path.exists(data["CustomWIPLevelsPath"] + f'\\{level}'):
-    match = False
-    matches = []
-    for x in os.listdir(data["CustomWIPLevelsPath"]):
-        if level in x:
-            match = True
-            matches.append(x)
-    if match:
-        print("Could not find the level you were looking for. Here are a few matches, however:")
-        for y in range(len(matches)):
-            print(f'{y+1}. {matches[y]} ')
-        print("Insert the number to quickly open that level")
-        try:
-            level = int(input(''))
+print("Warning! it is REQUIRED that you have your level already mapped for this! Block positions don't have to be perfect, you can edit those directly in here.")
+level = input("Insert level name: ")
+match = False
+matches = []
+for x in os.listdir(data["CustomWIPLevelsPath"]):
+    if level in x:
+        match = True
+        matches.append(x)
+if match:
+    print("Here is a list with levels similar to what you entered:")
+    for y in range(len(matches)):
+        print(f'{y+1}. {matches[y]} ')
+    print("Insert the number to quickly open that level")
+    try:
+        level = int(input(''))
 
-        except:
-            raise TypeError("Not a number.")
+    except:
+        raise TypeError("Not a number.")
 
-        if level > len(matches):
-            raise OverflowError("Item exited the bounds of the level list.")
-        else:
-            diff =input("Insert Difficulty (ExpertPlus, not Expert+)")
-            print("Loading Level...")
-            EditorLevel = OpenLevel(matches[level-1], difficulty=diff) # This will assume you're editing in Standard mode. 
-            print("Loading UI...")
-            Editor(EditorLevel)
+    if level > len(matches):
+        raise OverflowError("Item exited the bounds of the level list.")
+    else:
+        diff =input("Insert Difficulty (ExpertPlus, not Expert+)")
+        print("Loading Level...")
+        EditorLevel = OpenLevel(matches[level-1], difficulty=diff) # This will assume you're editing in Standard mode. 
+        print("Loading Editor...")
+        Editor(EditorLevel)
+else:
+    print("No levels matched your input. ")
