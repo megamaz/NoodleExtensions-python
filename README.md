@@ -21,19 +21,21 @@ PPPPPPPPPP          NNNNNNNN         NNNNNNNEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
 # Quick Access
 - [Downloading](#Downloading)
 - [First Startup](#FirstStartup)
+- [Basics](#Basics)
+
 # Downloading
 In the releases tab, there will be two files: a `main.exe` and a `source.zip`. If you don't want to edit the source code and just want to get to editing, then download the `main.exe` and run it. Then, just follow the instructions below.
 
-## First Startup
+## FirstStartup
 Upon first starting up PNEE, You'll be greeted with a screen that hopefully looks like this;
-![tartup](https://i.ibb.co/qFTT65L/First-Startup.png)
+![startup](https://i.ibb.co/qFTT65L/First-Startup.png)
 
 Install locations are listed here:
 - **Steam**: `C:\Program Files (x86)\Steam\steamapps\common\Beat Saber`
 - **Oculus**: `C:\OculusApps\Software\hyperbolic-magnematism-beat-saber`\
 Anywhere else would be custom, just input that into it.
 
-## PNEE Basics
+## Basics
 Now that your Beat Saber install location is complete, a `data.json` and `levels.json` files have appeared. `data.json` will just be keeping what levels you've edited and the Beat Saber custom WIP levels folder. 
 Now, you should have a screen that looks like this
 ![PNEEmain](https://i.ibb.co/Qbs1zBR/Intro-Screen.png)
