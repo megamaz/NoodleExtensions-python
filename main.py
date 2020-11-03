@@ -16,7 +16,7 @@
 # PPPPPPPPPP          NNNNNNNN         NNNNNNNEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE    
 #                       
 # Python Noodle Extensions Editor. (Great name, I know.) I can't do ASCII, so I used http://patorjk.com/software/taag/#p=testall&h=0&v=0&f=Alpha&t=PNEE "Doh" (Pronounced the same as Knee, /nē/)
-# This code is awfully simple. Please improve it.
+# This code is awful. Please improve it.
 
 import json, os
 from pathlib import Path
@@ -98,9 +98,7 @@ def OpenLevel(wipLevelFolder, difficulty, charact='Standard'):
                 return json.load(GetDiff)
 
 # User Interface (UI) or rather, the actual editor the user will be using to animate and stuff. 
-
-# The editor isn't an actual 3D thing or whatever. It's a CMD - although it quickly gets annoying
-# To edit, at least it's faster than manually editing a JSON file. 
+# I have no fucking idea how to make it. 
 def Editor(leveldata, levelfolder):
     '''
     The actual editor where the user will be able to... well edit.

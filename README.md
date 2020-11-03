@@ -23,7 +23,7 @@ PPPPPPPPPP          NNNNNNNN         NNNNNNNEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
 - [First Startup](#FirstStartup)
 - [Basics](#Basics)
 
-# Downloading
+## Downloading
 In the releases tab, there will be two files: a `main.exe` and a `source.zip`. If you don't want to edit the source code and just want to get to editing, then download the `main.exe` and run it. Then, just follow the instructions below.
 
 ## FirstStartup
