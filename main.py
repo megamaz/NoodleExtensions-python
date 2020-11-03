@@ -39,6 +39,7 @@ if needs_setup:
         else:
             data = {
                 'CustomWIPLevelsPath':install_loc + '\\Beat Saber_data\\CustomWIPLevels',
+                "promptType":False,
                 'NoodleExtensionsLevels':[]
             }
             with open(GetLocalPath('data.json'), 'w') as SetupData:
@@ -86,25 +87,21 @@ def OpenLevel(wipLevelFolder, difficulty, charact='Standard'):
             json.dump(reqs, AddReq)
         
         diffic_path = rf'{data["CustomWIPLevelsPath"]}\{wipLevelFolder}\{difficulty}'
-        if not os.path.exists(f'{diffic_path}{charact}.dat'):
-            if not os.path.exists(f'{diffic_path}.dat'):
-                if not os.path.exists(f'{diffic_path}{charact}.dat'):
-                    raise FileNotFoundError("This difficulty does not exist.")
-                else:
-                    with open(f'{diffic_path}{charact}.dat', 'r') as GetDiff:
-                        return json.load(GetDiff)
+        if not os.path.exists(f'{diffic_path}.dat'):
+            if not os.path.exists(f'{diffic_path}{charact}.dat'):
+                raise FileNotFoundError("This difficulty does not exist.")
             else:
-                with open(f'{diffic_path}.dat', 'r') as GetDiff:
+                with open(f'{diffic_path}{charact}.dat', 'r') as GetDiff:
                     return json.load(GetDiff)
         else:
-            with open(f'{diffic_path}{charact}.dat', 'r') as GetDiff:
+            with open(f'{diffic_path}.dat', 'r') as GetDiff:
                 return json.load(GetDiff)
 
 # User Interface (UI) or rather, the actual editor the user will be using to animate and stuff. 
 
 # The editor isn't an actual 3D thing or whatever. It's a CMD - although it quickly gets annoying
 # To edit, at least it's faster than manually editing a JSON file. 
-def Editor(leveldata):
+def Editor(leveldata, levelfolder):
     '''
     The actual editor where the user will be able to... well edit.
     - leveldata\n
@@ -112,47 +109,7 @@ def Editor(leveldata):
     - levelpath\n
     The level difficulty path. not the folder, the difficulty (StandardExpertPlus.dat)
     '''
-    actions = 'newtrack editblock'.split()
-    actionsHelp = '''
-- NewTrack
-Creates a new track to put blocks in.
-- EditBlock
-Edits a block (will have subactions show up)
--Save
-Saves the file. DONT FORGET TO SAVE!!'''
-    with open(GetLocalPath('levels.json'), 'r') as getlevels:
-        levels = json.load(getlevels)
-    blocks = [
-        [
-            '^',
-            'V',
-            '<',
-            '>',
-            '┐',
-            '┌',
-            '└',
-            '┘',
-            'o'
-        ],
-        [
-             '^',
-             'V',
-             '<',
-             '>',
-             '┐',
-             '┌',
-             '└',
-             '┘',
-             'o'   
-        ],
-        " ",
-        "☼"
-    ]
-    while True:
-        action = input("Insert Action (help to see list): ").lower()
-        if action not in actions:
-            print("Not an action.")
-            continue
+        
 
 
 
@@ -179,21 +136,22 @@ PPPPPPPPPP          NNNNNNNN         NNNNNNNEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
 
 A Python based Beat Saber Noodle Extensions Editor (Python Noodle Extensions Editor)
 ''')
-print("Warning! it is REQUIRED that you have your level already mapped for this! Block positions don't have to be perfect, you can edit those directly in here.")
-level = input("Insert level name: ")
+# print("Warning! it is REQUIRED that you have your level already mapped for this! Block positions don't have to be perfect, you can edit those directly in here.") 
+# You can now directly place blocks in PNEE.
+level = input("\nInsert level name: ").lower()
 match = False
 matches = []
 for x in os.listdir(data["CustomWIPLevelsPath"]):
-    if level in x:
+    if level in x.lower():
         match = True
         matches.append(x)
 if match:
     print("Here is a list with levels similar to what you entered:")
     for y in range(len(matches)):
         print(f'{y+1}. {matches[y]} ')
-    print("Insert the number to quickly open that level")
+    print("Insert the number to quickly open that level\n")
     try:
-        level = int(input(''))
+        level = int(input('> '))
 
     except:
         raise TypeError("Not a number.")
@@ -201,10 +159,14 @@ if match:
     if level > len(matches):
         raise OverflowError("Item exited the bounds of the level list.")
     else:
-        diff =input("Insert Difficulty (ExpertPlus, not Expert+)")
+        diff =input("Insert Difficulty (ExpertPlus, not Expert+): ")
+        lvltype = 'Standard'
+        if bool(data["promptType"]):
+            lvltype = input("Insert Level type (default is Standard.): ")
         print("Loading Level...")
-        EditorLevel = OpenLevel(matches[level-1], difficulty=diff) # This will assume you're editing in Standard mode. 
+        EditorLevel = OpenLevel(matches[level-1], difficulty=diff, charact=lvltype)
         print("Loading Editor...")
-        Editor(EditorLevel)
+        print('\n'*100) # Clear the terminal. (user can still scroll up.)
+        Editor(EditorLevel, f'{data["CustomWIPLevelsPath"]}\\{matches[y-1]}')
 else:
     print("No levels matched your input. ")
