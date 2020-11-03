@@ -18,10 +18,13 @@ P::::::::P          N::::::N       N:::::::NE::::::::::::::::::::EE:::::::::::::
 P::::::::P          N::::::N        N::::::NE::::::::::::::::::::EE::::::::::::::::::::E
 PPPPPPPPPP          NNNNNNNN         NNNNNNNEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
 ```
-# Downloading and Running
+# Quick Access
+- [Downloading](#Downloading)
+- [First Startup](#FirstStartup)
+# Downloading
 In the releases tab, there will be two files: a `main.exe` and a `source.zip`. If you don't want to edit the source code and just want to get to editing, then download the `main.exe` and run it. Then, just follow the instructions below.
 
-## PNEE First Startup
+## First Startup
 Upon first starting up PNEE, You'll be greeted with a screen that hopefully looks like this;
 ![tartup](https://i.ibb.co/qFTT65L/First-Startup.png)
 
