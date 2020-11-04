@@ -82,11 +82,13 @@ class Editor():
             infodat = json.load(getinfodat)
         with open(infodatpath, 'w') as editinfodat:
             for x in range(len(infodat["_difficultyBeatmapSets"])):
-                if infodat["_difficultyBeatmapSets"][x]["_difficultyBeatmaps"]["beatmapFilename"] == CustomLevelPath.split("\\")[len(CustomLevelPath.split("\\"))-1]: # if the difficulty is the same file as the fucking one the user is using
-                    if infodat["_difficultyBeatmapSets"][x]["_difficultyBeatmaps"].get("_requirements") == None:
-                        infodat["_difficultyBeatmapSets"][x]["_difficultyBeatmaps"]["_requirements"] = []
-                    if "Noodle Extenions" not in infodat["_difficultyBeatmapSets"][x]["_difficultyBeatmaps"]["_requirements"]:
-                        infodat["_difficultyBeatmapSets"][x]["_difficultyBeatmaps"]["_requirements"].append("Noodle Extensions")
+                for y in range(len(infodat["_difficultyBeatmapSets"][x]["_difficultyBeatmaps"])):
+                    if infodat["_difficultyBeatmapSets"][x]["_difficultyBeatmaps"][y]["_beatmapFilename"] == CustomLevelPath.split("\\")[len(CustomLevelPath.split("\\"))-1]: # if the difficulty is the same file as the fucking one the user is using
+                        if infodat["_difficultyBeatmapSets"][x]["_difficultyBeatmaps"][y].get("_requirements") == None:
+                            infodat["_difficultyBeatmapSets"][x]["_difficultyBeatmaps"][y]["_requirements"] = []
+                        if "Noodle Extenions" not in infodat["_difficultyBeatmapSets"][x]["_difficultyBeatmaps"][y]["_requirements"]:
+                            infodat["_difficultyBeatmapSets"][x]["_difficultyBeatmaps"][y]["_requirements"].append("Noodle Extensions")
+            json.dump(infodat, editinfodat)
 
     def EditBlock(self, beat, index, layer, track=None, false=False, interactable=True):
         '''
