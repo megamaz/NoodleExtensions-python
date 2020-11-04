@@ -28,6 +28,24 @@ PATHSWINDOWS = { # A list of internal Beat Saber download paths.
 }
 # Need someone to add a PATHSLINUX. I own windows and do not know where these are.
 EASINGSNET = "https://easings.net"
+TRACKANIMATORTYPES = [
+    "_position",
+    "_rotation",
+    "_localRotation",
+    "_scale",
+    "_dissolve",
+    "_dissolveArrow",
+    "_time"
+]
+TRACKANIMATORFORMATS = {
+     "_position":       '[left/right, up/down, forw/backw, time (beat), "easing"]',
+     "_rotation":       '[pitch, yaw, roll, time (beat), "easing"]',
+"_localRotation":       '[pitch, yaw, roll, time (beat), "easing"]',
+        "_scale":       '[left/right, up/down, forw/backw, time (beat), "easing"]',
+     "_dissolve":       '[amount, time (beat), "easing"]',
+"_dissolveArrow":       '[amount, time (beat), "easing"]',
+         "_time":       '[lifespan, time (beat), "easing"]'
+}
 EASINGS = [
     "easeInsine",
     "easeOutSine",
@@ -131,17 +149,12 @@ class TrackAnimator():
         '''just put in the Editor object you're using.'''
         self.editor = editor # this is as to be able to access the actual level.dat file.
     
-    def position(self, pos:list, track, start, end):
+    def animate(self, animationType, data:list, track, start, end):
         '''
-        - `pos` (list) that should look something like this;
-        ```
-        [
-            [x, y, z, time (beat), ease (optional)],
-            [x, y, z, time (beat), ease (optional)],
-            ...
-        ]
-        ``` It will be used to animate the blocks in the track.
-        - x     : LEFT/RIGHT
+        - `data` (list) that should look something like this;
+
+        It will be used to animate the blocks in the track.
+        - x     : the first data point.
         - y     : UP/DOWN
         - z     : FORWARDS/BACKWARDS
         - time  : The beat where the animation should start
@@ -152,7 +165,8 @@ class TrackAnimator():
         - `end` the end (in beats) where the animation should end.
         '''
     
-
+        if animationType not in TRACKANIMATORTYPES:
+            raise IndexError(f"The provided type {animationType} is not valid.")
         with open(self.editor.CustomLevelPath, 'r') as GetCustomEvents:
             ce = json.load(GetCustomEvents)
         with open(self.editor.CustomLevelPath, 'w') as EditCustomEvents:
@@ -160,7 +174,7 @@ class TrackAnimator():
                 ce["_customData"]["_customEvents"] = []
             
             for x in range(len(ce["_customData"]["_customEvents"])):
-                if ce["_customData"]["_customEvents"][x]["_data"]["_position"] == pos: # if that event already exists
+                if ce["_customData"]["_customEvents"][x]["_data"][animationType] == data: # if that event already exists
                     return
             ce["_customData"]["_customEvents"].append(
                 {
@@ -169,7 +183,7 @@ class TrackAnimator():
                     "_data":{
                         "_track" : track,
                         "_duration": end-start,
-                        "_position":pos
+                        animationType:data
                     }
                 }
             )
