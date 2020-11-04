@@ -53,4 +53,4 @@ Position statements are going to look like this; `[x, y, z, time, easing]`
 - time : the time, 0-1, where the animation should happen
 - easing : all easings are gained from [easings.net](https://easings.net)
 The first setting in the nested list says that at the very beginning the note should be 10 units high. The next setting says that it should go back to where it was - (0, 0, 0) with the bouncing easing. \
-After the nested list, you name the track you want to animte - `MoveTrack` - when the animation should start (beats) and when it should end (beata)
+After the nested list, you name the track you want to animte - `MoveTrack` - when the animation should start (beats) and when it should end (beats)

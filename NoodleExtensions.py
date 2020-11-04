@@ -109,7 +109,7 @@ class Editor():
                     if infodat["_difficultyBeatmapSets"][x]["_difficultyBeatmaps"][y]["_beatmapFilename"] == CustomLevelPath.split("\\")[len(CustomLevelPath.split("\\"))-1]: # if the difficulty is the same file as the one the user is using
                         if infodat["_difficultyBeatmapSets"][x]["_difficultyBeatmaps"][y]["_customData"].get("_requirements") == None:
                             infodat["_difficultyBeatmapSets"][x]["_difficultyBeatmaps"][y]["_customData"]["_requirements"] = []
-                        if "Noodle Extenions" not in infodat["_difficultyBeatmapSets"][x]["_difficultyBeatmaps"][y]["_customData"]["_requirements"]:
+                        if not "Noodle Extensions" in infodat["_difficultyBeatmapSets"][x]["_difficultyBeatmaps"][y]["_customData"]["_requirements"]:
                             infodat["_difficultyBeatmapSets"][x]["_difficultyBeatmaps"][y]["_customData"]["_requirements"].append("Noodle Extensions")
             json.dump(infodat, editinfodat)
 
@@ -181,8 +181,10 @@ class Animator():
                 ce["_customData"]["_customEvents"] = []
             
             for x in range(len(ce["_customData"]["_customEvents"])):
-                if ce["_customData"]["_customEvents"][x]["_data"][animationType] == data and ce["_customData"]["_customEvents"][x]["_type"] == eventtype: # if that event already exists
-                    return
+                if ce["_customData"]["_customEvents"][x]["_data"].get(animationType) != None:
+                    if ce["_customData"]["_customEvents"][x]["_data"][animationType] == data and ce["_customData"]["_customEvents"][x]["_type"] == eventtype: # if that event already exists
+                        json.dump(ce, EditCustomEvents)
+                        return
             ce["_customData"]["_customEvents"].append(
                 {
                     "_time":start,
