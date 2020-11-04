@@ -26,6 +26,7 @@ PATHSWINDOWS = { # A list of internal Beat Saber download paths.
     "Steam":r"C:\Program Files (x86)\Steam\steamapps\common\Beat Saber",
     "Oculus":r"C:\OculusApps\Software\hyperbolic-magnematism-beat-saber"
 }
+# Need someone to add a PATHSLINUX. I own windows and do not know where these are.
 EASINGSNET = "https://easings.net"
 EASINGS = [
     "easeInsine",
@@ -59,7 +60,6 @@ EASINGS = [
     "easeOutBounce",
     "easeInOutBounce"
 ]   
-# Need someone to add a PATHSLINUX. I own windows and do not know where these are.
 
 class Editor():
     
@@ -84,10 +84,10 @@ class Editor():
             for x in range(len(infodat["_difficultyBeatmapSets"])):
                 for y in range(len(infodat["_difficultyBeatmapSets"][x]["_difficultyBeatmaps"])):
                     if infodat["_difficultyBeatmapSets"][x]["_difficultyBeatmaps"][y]["_beatmapFilename"] == CustomLevelPath.split("\\")[len(CustomLevelPath.split("\\"))-1]: # if the difficulty is the same file as the fucking one the user is using
-                        if infodat["_difficultyBeatmapSets"][x]["_difficultyBeatmaps"][y].get("_requirements") == None:
-                            infodat["_difficultyBeatmapSets"][x]["_difficultyBeatmaps"][y]["_requirements"] = []
-                        if "Noodle Extenions" not in infodat["_difficultyBeatmapSets"][x]["_difficultyBeatmaps"][y]["_requirements"]:
-                            infodat["_difficultyBeatmapSets"][x]["_difficultyBeatmaps"][y]["_requirements"].append("Noodle Extensions")
+                        if infodat["_difficultyBeatmapSets"][x]["_difficultyBeatmaps"][y]["_customData"].get("_requirements") == None:
+                            infodat["_difficultyBeatmapSets"][x]["_difficultyBeatmaps"][y]["_customData"]["_requirements"] = []
+                        if "Noodle Extenions" not in infodat["_difficultyBeatmapSets"][x]["_difficultyBeatmaps"][y]["_customData"]["_requirements"]:
+                            infodat["_difficultyBeatmapSets"][x]["_difficultyBeatmaps"][y]["_customData"]["_requirements"].append("Noodle Extensions")
             json.dump(infodat, editinfodat)
 
     def EditBlock(self, beat, index, layer, track=None, false=False, interactable=True):
@@ -151,12 +151,17 @@ class TrackAnimator():
         - `start` the start (in beats) where the animation should start
         - `end` the end (in beats) where the animation should end.
         '''
+    
 
         with open(self.editor.CustomLevelPath, 'r') as GetCustomEvents:
             ce = json.load(GetCustomEvents)
         with open(self.editor.CustomLevelPath, 'w') as EditCustomEvents:
             if ce["_customData"].get("_customEvents") == None:
                 ce["_customData"]["_customEvents"] = []
+            
+            for x in range(len(ce["_customData"]["_customEvents"])):
+                if ce["_customData"]["_customEvents"][x]["_time"] == start: # if that even already exists
+                    return
             ce["_customData"]["_customEvents"].append(
                 {
                     "_time":start,
