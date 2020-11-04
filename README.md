@@ -19,5 +19,5 @@ P::::::::P          N::::::N        N::::::NE::::::::::::::::::::EE:::::::::::::
 PPPPPPPPPP          NNNNNNNN         NNNNNNNEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
 ```
 
-*it's empty in here because I restarted the program...*\
+*it's empty in here because it's incomplete... Come back later if you wish.*\
 *if you would like to keep working on an obsolete version of thie project, check out the `master_but_obsolete` branch.*
