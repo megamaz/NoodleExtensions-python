@@ -28,7 +28,7 @@ PATHSWINDOWS = { # A list of internal Beat Saber download paths.
 }
 # Need someone to add a PATHSLINUX. I own windows and do not know where these are.
 EASINGSNET = "https://easings.net"
-TRACKANIMATORTYPES = [
+ANIMATORTYPES = [
     "_position",
     "_rotation",
     "_localRotation",
@@ -37,7 +37,7 @@ TRACKANIMATORTYPES = [
     "_dissolveArrow",
     "_time"
 ]
-TRACKANIMATORFORMATS = {
+ANIMATORFORMATS = {
      "_position":       '[left/right, up/down, forw/backw, time (beat), "easing"]',
      "_rotation":       '[pitch, yaw, roll, time (beat), "easing"]',
 "_localRotation":       '[pitch, yaw, roll, time (beat), "easing"]',
@@ -46,6 +46,10 @@ TRACKANIMATORFORMATS = {
 "_dissolveArrow":       '[amount, time (beat), "easing"]',
          "_time":       '[lifespan, time (beat), "easing"]'
 }
+EVENTTYPES = [
+    "AnimateTrack",
+    "AssignPathAnimation"
+]
 EASINGS = [
     "easeInsine",
     "easeOutSine",
@@ -100,8 +104,9 @@ class Editor():
             infodat = json.load(getinfodat)
         with open(infodatpath, 'w') as editinfodat:
             for x in range(len(infodat["_difficultyBeatmapSets"])):
+                # warning: the next few lines are ugly.
                 for y in range(len(infodat["_difficultyBeatmapSets"][x]["_difficultyBeatmaps"])):
-                    if infodat["_difficultyBeatmapSets"][x]["_difficultyBeatmaps"][y]["_beatmapFilename"] == CustomLevelPath.split("\\")[len(CustomLevelPath.split("\\"))-1]: # if the difficulty is the same file as the fucking one the user is using
+                    if infodat["_difficultyBeatmapSets"][x]["_difficultyBeatmaps"][y]["_beatmapFilename"] == CustomLevelPath.split("\\")[len(CustomLevelPath.split("\\"))-1]: # if the difficulty is the same file as the one the user is using
                         if infodat["_difficultyBeatmapSets"][x]["_difficultyBeatmaps"][y]["_customData"].get("_requirements") == None:
                             infodat["_difficultyBeatmapSets"][x]["_difficultyBeatmaps"][y]["_customData"]["_requirements"] = []
                         if "Noodle Extenions" not in infodat["_difficultyBeatmapSets"][x]["_difficultyBeatmaps"][y]["_customData"]["_requirements"]:
@@ -112,7 +117,7 @@ class Editor():
         '''
         Edits a specific block/note (same thing)
         - `beat` The beat at which the block can be found.
-        - `pos` The position of the block. (0, 0) is found left-most row, bottom layer.
+        - `pos` The position of the block (tuple). (0, 0) is found left-most row, bottom layer.
 
         ### To edit the block
         - `track` add / change the track of a block. (ignore this to remove the track.)
@@ -142,20 +147,18 @@ class Editor():
             json.dump(notes, editnote_)
 
 
-class TrackAnimator():
+class Animator():
 
     def __init__(self, editor:Editor):
         '''just put in the Editor object you're using.'''
         self.editor = editor # this is as to be able to access the actual level.dat file.
     
-    def animate(self, animationType, data:list, track, start, end):
+    def Animate(self, eventtype, animationType, data:list, track, start, end):
         '''
         - `data` (list) that should look something like this;
 
         It will be used to animate the blocks in the track.
-        - x     : the first data point.
-        - y     : UP/DOWN
-        - z     : FORWARDS/BACKWARDS
+        - First few data points. (Gained from NoodleExtensions.TRACKANIMATIONFORMATS)
         - time  : The beat where the animation should start
         - ease  : easings. The speed which the note should move between animations. (can be gained from `NoodleExtensions.EASINGSNET`)
 
@@ -164,8 +167,11 @@ class TrackAnimator():
         - `end` the end (in beats) where the animation should end.
         '''
     
-        if animationType not in TRACKANIMATORTYPES:
-            raise IndexError(f"The provided type {animationType} is not valid.")
+        if animationType not in ANIMATORTYPES:
+            raise IndexError(f"The provided animation type {animationType} is not valid.")
+        
+        if eventtype not in EVENTTYPES:
+            raise IndexError(f"The provided event type {eventtype} is not valid")
         with open(self.editor.CustomLevelPath, 'r') as GetCustomEvents:
             ce = json.load(GetCustomEvents)
         with open(self.editor.CustomLevelPath, 'w') as EditCustomEvents:
@@ -173,12 +179,12 @@ class TrackAnimator():
                 ce["_customData"]["_customEvents"] = []
             
             for x in range(len(ce["_customData"]["_customEvents"])):
-                if ce["_customData"]["_customEvents"][x]["_data"][animationType] == data: # if that event already exists
+                if ce["_customData"]["_customEvents"][x]["_data"][animationType] == data and ce["_customData"]["_customEvents"][x]["_type"] == eventtype: # if that event already exists
                     return
             ce["_customData"]["_customEvents"].append(
                 {
                     "_time":start,
-                    "_type":"AnimateTrack",
+                    "_type":eventtype,
                     "_data":{
                         "_track" : track,
                         "_duration": end-start,
