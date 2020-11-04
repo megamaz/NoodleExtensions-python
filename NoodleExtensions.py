@@ -160,7 +160,7 @@ class TrackAnimator():
                 ce["_customData"]["_customEvents"] = []
             
             for x in range(len(ce["_customData"]["_customEvents"])):
-                if ce["_customData"]["_customEvents"][x]["_time"] == start: # if that even already exists
+                if ce["_customData"]["_customEvents"][x]["_data"]["_position"] == pos: # if that event already exists
                     return
             ce["_customData"]["_customEvents"].append(
                 {
