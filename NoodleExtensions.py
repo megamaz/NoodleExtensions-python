@@ -156,6 +156,8 @@ class Animator():
     def Animate(self, eventtype, animationType, data:list, track, start, end):
         '''
         - `data` (list) that should look something like this;
+        - `eventtype` what kind of animation is this (NoodleExtensions.EVENTTYPES)
+        - `animationType` how the note should be animated. (NoodleExtensions.ANIMATIONTYPES)
 
         It will be used to animate the blocks in the track.
         - First few data points. (Gained from NoodleExtensions.TRACKANIMATIONFORMATS)

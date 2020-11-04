@@ -3,4 +3,5 @@ build
 __pycache__
 main.spec
 examples
-1_POSITION.py
+*.py
+!NoodleExtensions.py
