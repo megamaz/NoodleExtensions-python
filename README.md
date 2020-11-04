@@ -18,6 +18,13 @@ P::::::::P          N::::::N       N:::::::NE::::::::::::::::::::EE:::::::::::::
 P::::::::P          N::::::N        N::::::NE::::::::::::::::::::EE::::::::::::::::::::E
 PPPPPPPPPP          NNNNNNNN         NNNNNNNEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
 ```
+## What is it?
+This is a Python Noodle Extensions Editor for Beat Saber levels. Manually editing a JSON file over a long period of time can get really annoying, so this should speed up the process!
 
-*it's empty in here because it's incomplete... Come back later if you wish.*\
-*if you would like to keep working on an obsolete version of thie project, check out the `master_but_obsolete` branch.*
+## How do I use it?
+The docs can be found [Here!](https://github.com/megamaz/NoodleExtensions-python/blob/master/docs/documentation.md)\
+Just go in the releases tab and download the latest version.
+
+## Extra notes:
+- Made entirely in python
+- Pull requests are appreciated. Someone needs to fix up my horid code.
