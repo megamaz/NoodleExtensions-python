@@ -65,12 +65,29 @@ class Editor():
     
     def __init__(self, CustomLevelPath):
         '''
-        - `CustomLevelPath` The path where the `level.dat` is. 
+        - `CustomLevelPath` The path where the `level.dat` is. (include `.dat`)
         '''
         if not os.path.exists(CustomLevelPath):
             raise FileNotFoundError("This level.dat file does not exist.")
         self.CustomLevelPath = CustomLevelPath
-    
+
+        # Edit info.dat to have NoodleExtensions as a req
+        infodatpath = CustomLevelPath
+        infodatpath = infodatpath.split("\\")
+        infodatpath.remove(infodatpath[len(infodatpath)-1])
+        infodatpath.append("info.dat")
+        infodatpath = "\\".join(infodatpath)
+
+        with open(infodatpath, 'r') as getinfodat:
+            infodat = json.load(getinfodat)
+        with open(infodatpath, 'w') as editinfodat:
+            for x in range(len(infodat["_difficultyBeatmapSets"])):
+                if infodat["_difficultyBeatmapSets"][x]["_difficultyBeatmaps"]["beatmapFilename"] == CustomLevelPath.split("\\")[len(CustomLevelPath.split("\\"))-1]: # if the difficulty is the same file as the fucking one the user is using
+                    if infodat["_difficultyBeatmapSets"][x]["_difficultyBeatmaps"].get("_requirements") == None:
+                        infodat["_difficultyBeatmapSets"][x]["_difficultyBeatmaps"]["_requirements"] = []
+                    if "Noodle Extenions" not in infodat["_difficultyBeatmapSets"][x]["_difficultyBeatmaps"]["_requirements"]:
+                        infodat["_difficultyBeatmapSets"][x]["_difficultyBeatmaps"]["_requirements"].append("Noodle Extensions")
+
     def EditBlock(self, beat, index, layer, track=None, false=False, interactable=True):
         '''
         Edits a specific block/note (same thing)
@@ -90,15 +107,15 @@ class Editor():
             notes = json.load(editnote)
         with open(self.CustomLevelPath, 'w') as editnote_:
             for x in range(len(notes["_notes"])):
-                if notes[x]["_time"] == beat and notes[x]["_lineIndex"] == index and notes[x]["_lineLayer"] == layer:
-                    false = False if not interactable else True # "Do note that if `interactable` is set to False, `false` will also be set to False. You don't want a block that will kill the player that cannot be hit."
+                if notes["_notes"][x]["_time"] == beat and notes["_notes"][x]["_lineIndex"] == index and notes["_notes"][x]["_lineLayer"] == layer:
+                    false = False if not interactable else False if not false else True # "Do note that if `interactable` is set to False, `false` will also be set to False. You don't want a block that will kill the player that cannot be hit."
                     if track == None:
-                        notes[x]["_customData"] = {
+                        notes["_notes"][x]["_customData"] = {
                             "_fake" : false,
                             "_interactable" : interactable
                         }
                     else:
-                        notes[x]["_customData"] = {
+                        notes["_notes"][x]["_customData"] = {
                             "_fake" : false,
                             "_interactable" : interactable,
                             "_track" : track
@@ -126,7 +143,7 @@ class TrackAnimator():
         - y     : UP/DOWN
         - z     : FORWARDS/BACKWARDS
         - time  : The beat where the animation should start
-        - ease  : easings. The speed which the note should move between animations. (can be gained from NoodleExtensions.EASINGSNET)
+        - ease  : easings. The speed which the note should move between animations. (can be gained from `NoodleExtensions.EASINGSNET`)
 
         - `track` the track you want to animate.
         - `start` the start (in beats) where the animation should start
@@ -136,11 +153,14 @@ class TrackAnimator():
         with open(self.editor.CustomLevelPath, 'r') as GetCustomEvents:
             ce = json.load(GetCustomEvents)
         with open(self.editor.CustomLevelPath, 'w') as EditCustomEvents:
-            ce["_customEvents"].append(
+            if ce["_customData"].get("_customEvents") == None:
+                ce["_customData"]["_customEvents"] = []
+            ce["_customData"]["_customEvents"].append(
                 {
                     "_time":start,
                     "_type":"AnimateTrack",
                     "_data":{
+                        "_track" : track,
                         "_duration": end-start,
                         "_position":pos
                     }
