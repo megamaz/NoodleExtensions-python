@@ -108,12 +108,11 @@ class Editor():
                             infodat["_difficultyBeatmapSets"][x]["_difficultyBeatmaps"][y]["_customData"]["_requirements"].append("Noodle Extensions")
             json.dump(infodat, editinfodat)
 
-    def EditBlock(self, beat, index, layer, track=None, false=False, interactable=True):
+    def EditBlock(self, beat, pos:tuple, track=None, false=False, interactable=True):
         '''
         Edits a specific block/note (same thing)
         - `beat` The beat at which the block can be found.
-        - `index` the "_lineIndex" property of the block, or the X position. (0 is left-most)
-        - `layer` the "_lineLayer" proeprty of the block, or the Y position. (0 is bottom)
+        - `pos` The position of the block. (0, 0) is found left-most row, bottom layer.
 
         ### To edit the block
         - `track` add / change the track of a block. (ignore this to remove the track.)
@@ -127,7 +126,7 @@ class Editor():
             notes = json.load(editnote)
         with open(self.CustomLevelPath, 'w') as editnote_:
             for x in range(len(notes["_notes"])):
-                if notes["_notes"][x]["_time"] == beat and notes["_notes"][x]["_lineIndex"] == index and notes["_notes"][x]["_lineLayer"] == layer:
+                if notes["_notes"][x]["_time"] == beat and notes["_notes"][x]["_lineIndex"] == pos[0] and notes["_notes"][x]["_lineLayer"] == pos[1]:
                     false = False if not interactable else False if not false else True # "Do note that if `interactable` is set to False, `false` will also be set to False. You don't want a block that will kill the player that cannot be hit."
                     if track == None:
                         notes["_notes"][x]["_customData"] = {
