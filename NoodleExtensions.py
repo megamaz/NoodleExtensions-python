@@ -82,9 +82,21 @@ EASINGS = [
     "easeOutBounce",
     "easeInOutBounce"
 ]   
+class Animations():
+    # this is for those who have autofill who can't remember the actual strings.
+    position = "_position"
+    rotation = "_rotation"
+    localRotation = "_localRotation"
+    scale = "_scale"
+    dissolveCube = "_dissolve"
+    dissolveArrow = "_dissolveArrow"
+    time = "_time"
 
 class Editor():
     
+    remove = 0
+    change = 1
+    add = 2
     def __init__(self, CustomLevelPath):
         '''
         - `CustomLevelPath` The path where the `level.dat` is. (include `.dat`)
@@ -145,16 +157,52 @@ class Editor():
                             "_track" : track
                         }
             json.dump(notes, editnote_)
+    
+    def EditEvent(self, time, EventType, track, editType:int, newData:dict=None):
+        '''
+        Edits a specific customEvent. 
+        - `time` the time at which the event occurs.
+        - `EventType` the type of the even you want to edit.
+        - `track` the track of the even you want to edit
+        - `editType` either Editor.remove, or Editor.change.\n
+        if using `Editor.remove`, then ignore the `newData` setting.
 
-
+        - `newData` The new data of the event. If using `Editor.remove` then ignore this.\n
+        If not using `Editor.remove`, then insert the new data using `Animator.Animate` as it returns the data you want.
+        '''
+        with open(self.CustomLevelPath, 'r') as GetEvents:
+            events = dict(json.load(GetEvents))
+        
+        if editType != 0 and newData == None: # if there's missing data and you're not removing
+            raise AttributeError("Missing newData setting, as you are not removing the event.")
+        with open(self.CustomLevelPath, 'w') as EditEvents:
+            if editType == 0: # if wanna remvoe
+                for x in range(len(events["_customData"]["_customEvents"])):
+                    if events["_customData"]["_customEvents"][x]["_type"] == EventType and events["_customData"]["_customEvents"][x]["_time"] == time and events["_customData"]["_customEvents"][x]["_data"]["_track"] == track: # a long line to just check whether or not the event is the correct one to remove.
+                        events["_customData"]["_customEvents"].remove(events["_customData"]["_customEvents"][x])
+                        break
+                json.dump(events, EditEvents)
+        
+            elif editType == 1: # if want to overwrite it with something else
+                for x in range(len(events["_customData"]["_customEvents"])):
+                    if events["_customData"]["_customEvents"][x]["_type"] == EventType and events["_customData"]["_customEvents"][x]["_time"] == time and events["_customData"]["_customEvents"][x]["_data"]["_track"] == track:
+                        events["_customData"]["_customEvents"][x] = newData
+                        break
+            
+            elif editType == 2:
+                for x in range(len(events["_customData"]["_customEvents"])):
+                    if events["_customData"]["_customEvents"][x]["_type"] == EventType and events["_customData"]["_customEvents"][x]["_time"] == time and events["_customData"]["_customEvents"][x]["_data"]["_track"] == track:
+                        events["_customData"]["_customEvents"][x]["_data"] == newData["_data"]
+                        break
 class Animator():
 
     def __init__(self, editor:Editor):
         '''just put in the Editor object you're using.'''
         self.editor = editor # this is as to be able to access the actual level.dat file.
     
-    def Animate(self, eventtype, animationType, data:list, track, start, end):
+    def Animate(self, eventtype, animationType, data:list, track, start, end) -> dict:
         '''
+        Animates a block and returns the Event's dictionary.
         - `data` (list) that should look something like this;
         - `eventtype` what kind of animation is this (NoodleExtensions.EVENTTYPES)
         - `animationType` how the note should be animated. (NoodleExtensions.ANIMATIONTYPES)
@@ -184,7 +232,7 @@ class Animator():
                 if ce["_customData"]["_customEvents"][x]["_data"].get(animationType) != None:
                     if ce["_customData"]["_customEvents"][x]["_data"][animationType] == data and ce["_customData"]["_customEvents"][x]["_type"] == eventtype: # if that event already exists
                         json.dump(ce, EditCustomEvents)
-                        return
+                        return None
             ce["_customData"]["_customEvents"].append(
                 {
                     "_time":start,
@@ -197,3 +245,12 @@ class Animator():
                 }
             )
             json.dump(ce, EditCustomEvents)
+            return  {
+                    "_time":start,
+                    "_type":eventtype,
+                    "_data":{
+                        "_track" : track,
+                        "_duration": end-start,
+                        animationType:data
+                    }
+                }
