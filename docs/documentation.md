@@ -26,8 +26,27 @@ editor = NoodleExtensions.Editor("Your Level.dat Path")
 
 animator = NoodleExtensions.Animator(editor) # this is the line to set up an animator. Really, not that hard!
 ```
-The animator can currently only animate tracks and path animations. `AssignPlayerToTrack` and `AssignTrackParent` are soon to come!
+The animator can currently only animate tracks and path animations. `AssignPlayerToTrack` and `AssignTrackParent` are soon to come!\
+It is recommended that any animation either start at 1-1.5 beats before the actual animation. This prevents the gif shown in [_position](#_position) from happening where the notes blips into position while it's moving towards the player. If that is your intended effect, than have at it.
 Animation quick guide:
 - [`_position`](#_position)
-
+- [`_rotation`](#_rotation)
 ## _position
+The position setting works like this: `[x, y, z, time, easing]`. Here's a reference to each;
+- x : left/right
+- y : up/down
+- z : forw/backw
+- time : the time in which the animation should happen, ranging from 0-1, start-end
+- easing : How the block should move during the animation. Gained from NoodleExtensions.EASINGS or [easings.net](https://easings.net).
+Here is the in-line usage;
+```py
+. . .
+animator.Animate("AnimateTrack", NoodleExtensions.Animations.position, [
+    [0, 10, 0, 0],
+    [0, 0, 0, 1, "easeOutBounce"]
+], "BounceTrack", 3, 4)
+```
+This above gives us this result;\
+![Bounce](images/bounce.gif)\
+
+## _rotation
