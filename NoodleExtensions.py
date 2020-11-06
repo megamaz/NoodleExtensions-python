@@ -158,6 +158,34 @@ class Editor():
                         }
             json.dump(notes, editnote_)
     
+    def EditWall(self, beat, length, index, track=None, false=False, interactable=True):
+        '''
+        The exact same as EditNote except it's EditWall (edits a wall.)
+        - `beat` The beat at which it starts
+        - `length` The beat at which it ends
+        - `index` The row on which it's on (0 is left-most)
+
+        - `track` The track to assign to the wall. Leave empty to remove it
+        - `false` whether or not the Wall will damage the player.
+        - `interactable` whether or not the wall will vibrate the controllers. 
+        '''
+        with open(self.CustomLevelPath, 'r') as getWalls:
+            walls = json.load(getWalls)
+        with open(self.CustomLevelPath, 'w') as EditWalls:
+            for x in range(len(walls["_obstacles"])):
+                if walls["_obstalces"][x]["_time"] == beat and walls["_obstalces"][x]["_duration"] == length-beat and walls["_obstalces"][x]["_lineIndex"] == index: # if we're talking about the same wall
+                    if track != None:
+                        walls["_obstacles"][x]["_customData"] = {
+                            "_track" : track,
+                            "_fake" : false,
+                            "_interactable" : interactable
+                        }
+                    else:
+                        walls["_obstacles"][x]["_customData"] = {
+                            "_fake" : false,
+                            "_interactable" : interactable
+                        }
+                        
     def EditEvent(self, time, EventType, track, editType:int, newData:dict=None):
         '''
         Edits a specific customEvent. 
