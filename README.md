@@ -22,7 +22,7 @@ PPPPPPPPPP          NNNNNNNN         NNNNNNNEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
 This is a Python Noodle Extensions Editor for Beat Saber levels. Manually editing a JSON file over a long period of time can get really annoying, so this should speed up the process!
 
 ## How do I use it?
-The docs can be found [Here!](https://github.com/megamaz/NoodleExtensions-python/blob/master/docs/documentation.md)\
+The docs can be found [Here!](https://github.com/megamaz/NoodleExtensions-python/blob/master/docs/documentation.md) (needs to be finished!)\
 Just go in the releases tab and download the latest version.
 
 ## Extra notes:
