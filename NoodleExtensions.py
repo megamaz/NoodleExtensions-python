@@ -185,7 +185,9 @@ class Editor():
                             "_fake" : false,
                             "_interactable" : interactable
                         }
-                        
+                    break
+            json.dump(walls, EditWalls)
+
     def EditEvent(self, time, EventType, track, editType:int, newData:dict=None):
         '''
         Edits a specific customEvent. 
