@@ -287,14 +287,16 @@ class Animator():
                         animationType:data
                     }
                 }
-print("""
-If you're running this file it seems you don't have a proper understanding of how to use it.
-To use it, go to https://github.com/megamaz/NoodleExtensions-python/blob/master/docs/documentation.md (the documentation) and read it.
-It explains in thorough detail how everything works.
 
-Just a reminder that this file is not meant to be ran but is meant to be imported. 
-In a python script, it would look like this;
+if __name__ == "__main__":
+    print("""
+    If you're running this file it seems you don't have a proper understanding of how to use it.
+    To use it, go to https://github.com/megamaz/NoodleExtensions-python/blob/master/docs/documentation.md (the documentation) and read it.
+    It explains in thorough detail how everything works.
 
-import NoodleExtensions
+    Just a reminder that this file is not meant to be ran but is meant to be imported. 
+    In a python script, it would look like this;
 
-Thank you for using my script!""")
+    import NoodleExtensions
+
+    Thank you for using my script!""")
