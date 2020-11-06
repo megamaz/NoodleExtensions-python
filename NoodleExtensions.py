@@ -26,7 +26,10 @@ PATHSWINDOWS = { # A list of internal Beat Saber download paths.
     "Steam":r"C:\Program Files (x86)\Steam\steamapps\common\Beat Saber",
     "Oculus":r"C:\OculusApps\Software\hyperbolic-magnematism-beat-saber"
 }
-# Need someone to add a PATHSLINUX. I own windows and do not know where these are.
+PATHSLINUX = {
+    "Steam":r"~/.steam/steam/SteamApps/common/Beat Saber",
+    "Oculus":r"unknown" # I need someone to add an oculus download path (if exists) for Linux
+}
 EASINGSNET = "https://easings.net"
 ANIMATORTYPES = [
     "_position",
@@ -284,3 +287,14 @@ class Animator():
                         animationType:data
                     }
                 }
+print("""
+If you're running this file it seems you don't have a proper understanding of how to use it.
+To use it, go to https://github.com/megamaz/NoodleExtensions-python/blob/master/docs/documentation.md (the documentation) and read it.
+It explains in thorough detail how everything works.
+
+Just a reminder that this file is not meant to be ran but is meant to be imported. 
+In a python script, it would look like this;
+
+import NoodleExtensions
+
+Thank you for using my script!""")

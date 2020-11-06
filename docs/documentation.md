@@ -9,15 +9,35 @@ To start using this script, very simply just `import NoodleExtensions` and you s
 Quick Access (they are in order of which they must be completed.)
 1. [Editor](#Editor)
 1. [Animator](#Animator)
-## Editor 
+# Editor 
 The editor is the key element to your script. It will be containing the actual level data. It's really simple to setup, here's an example in two lines;
 ```py
 import NoodleExtensions
 editor = NoodleExtensions.Editor("Your Level.dat Path")
 ```
-It's really that simple. There's not much else to it. 
-
-## Animator
+It's really that simple. There's not much else to it.\
+To actually use the `editor` object you created, there's a few things you can do;
+## EditBlock
+The edit block allows you to change the block's `_customData` property. It currently only supports `_track`, `_fake`, and `_interactable`.\
+For the inline usage, you need to tell it the beat of the block and it's position relative to the bottom left corner of the 3x4 grid. 
+```py
+editor.EditBlock(6, (1, 0), "ExampleTrack", True, False)
+```
+The code above grabbed a block on beat 6 who is in the bottom middle left of the 3x4 grid, (color / direction doesn't matter), gave it the `ExampleTrack` track, made it a False block that cannot be interacted with. 
+## EditWall
+This is the same as EditBlock, except it's for a wall. It changes the `_customData` property of the wall, and curently only support `_track`, `_fake`, and `_interactable`.
+```py
+edit.EditWall(6, 6, 3, "ExampleTrack", False, True)
+```
+The code above edited the wall to being a normal wall, just included the the `ExampleTrack` to it. The wall is set to be real and interactable.
+## EditEvent
+This one is to either Change, remove, or overwrite an event with a new one.\
+To remove an event, simply do this;
+```py
+editor.EditEvent(6, "_eventExample", "ExampleTrack", editor.remove)
+```
+if doing anything else, there is a `newData` setting which will be a dictionary of the `_data` object that will be inside the `_customEvent` item.
+# Animator
 The animator is what (you guessed it) will be taking care of all the animating. You NEED to have an [editor](#Editor) setup for the Animator to work. There is no skipping that step.\
 Here is a quick example of setting up an Animator;
 ```py
@@ -27,7 +47,7 @@ editor = NoodleExtensions.Editor("Your Level.dat Path")
 animator = NoodleExtensions.Animator(editor) # this is the line to set up an animator. Really, not that hard!
 ```
 The animator can currently only animate tracks and path animations. `AssignPlayerToTrack` and `AssignTrackParent` are soon to come!\
-It is recommended that any animation either start at 1-1.5 beats before the actual animation. This prevents the gif shown in [_position](#_position) from happening where the notes blips into position while it's moving towards the player. If that is your intended effect, than have at it.
+It is recommended that any animation either start at 1-1.5 beats before the actual animation. This prevents the gif shown in [_position](#_position) from happening where the notes blips into position while it's moving towards the player. If that is your intended effect, then have at it.\
 Animation quick guide:
 - [`_position`](#_position)
 - [`_rotation`](#_rotation)
@@ -47,6 +67,6 @@ animator.Animate("AnimateTrack", NoodleExtensions.Animations.position, [
 ], "BounceTrack", 3, 4)
 ```
 This above gives us this result;\
-![Bounce](images/bounce.gif)\
+![Bounce](images/bounce.gif)
 
 ## _rotation
