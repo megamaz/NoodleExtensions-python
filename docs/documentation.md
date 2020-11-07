@@ -52,7 +52,7 @@ Animation quick guide:
 - [`_position`](#_position)
 - [`_rotation`](#_rotation-and-_localrotation)
 ## _position
-[Example Script](https://github.com/megamaz/NoodleExtensions-python/tree/master/examples/1_position.py)\
+[Example Script](https://github.com/megamaz/NoodleExtensions-python/blob/master/examples/1_POSITION.py)\
 The position setting works like this: `[x, y, z, time, easing]`. Here's a reference to each;
 - x : left/right
 - y : up/down
@@ -71,7 +71,7 @@ This above gives us this result;\
 ![Bounce](images/bounce.gif)
 
 ## _rotation and _localRotation
-[Example Script](https://github.com/megamaz/NoodleExtensions-python/tree/master/examples/2_rotation.py)\
+[Example Script](https://github.com/megamaz/NoodleExtensions-python/tree/master/examples/2_ROTATION.py)\
 The rotation and localRotation both use the same settings: `[pitch, yaw, roll, time, easing]` (you can think of the rotation as a stick going through the block, and the block rotating from that stick)
 - pitch : left / right
 - yaw : top/down
