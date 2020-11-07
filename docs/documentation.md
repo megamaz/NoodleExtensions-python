@@ -1,7 +1,7 @@
 # Python Noodle Extensions Editor (PNEE)
 if you're unsure on how to use this script, this should help you out. 
 
-## Setting-Up
+## Setting Up
 if you haven't already, download the NoodleExtensions.py from the [Latest Release](https://github.com/megamaz/NoodleExtensions-python/releases) and put it inside the same folder that will contain your code.\
 To start using this script, very simply just `import NoodleExtensions` and you should be good to go!
 
@@ -50,8 +50,9 @@ The animator can currently only animate tracks and path animations. `AssignPlaye
 It is recommended that any animation either start at 1-1.5 beats before the actual animation. This prevents the gif shown in [_position](#_position) from happening where the notes blips into position while it's moving towards the player. If that is your intended effect, then have at it.\
 Animation quick guide:
 - [`_position`](#_position)
-- [`_rotation`](#_rotation)
+- [`_rotation`](#_rotation-and-_localrotation)
 ## _position
+[Example Script](https://github.com/megamaz/NoodleExtensions-python/tree/master/examples/1_position.py)\
 The position setting works like this: `[x, y, z, time, easing]`. Here's a reference to each;
 - x : left/right
 - y : up/down
@@ -69,4 +70,21 @@ animator.Animate("AnimateTrack", NoodleExtensions.Animations.position, [
 This above gives us this result;\
 ![Bounce](images/bounce.gif)
 
-## _rotation
+## _rotation and _localRotation
+[Example Script](https://github.com/megamaz/NoodleExtensions-python/tree/master/examples/2_rotation.py)\
+The rotation and localRotation both use the same settings: `[pitch, yaw, roll, time, easing]` (you can think of the rotation as a stick going through the block, and the block rotating from that stick)
+- pitch : left / right
+- yaw : top/down
+- roll : front/back
+- time : the time in which the animation should happen, ranging from 0-1, start-end
+- easing : How the block should move during the animation. Gained from NoodleExtensions.EASINGS or [easings.net](https://easings.net).
+Inline usage looks like this;
+```py
+. . .
+animator.Animate("AnimateTrack", NoodleExtensions.Animations.rotation, [
+    [0, 0, 0, 0],
+    [0, 0, 180, 1, "easeInOutBack"]
+], "RotationTrack", 5, 6)
+```
+The code above then gives us this result:\
+![Rotate](images/rotate.gif)
