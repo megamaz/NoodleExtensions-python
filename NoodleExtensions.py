@@ -38,7 +38,8 @@ ANIMATORTYPES = [
     "_scale",
     "_dissolve",
     "_dissolveArrow",
-    "_time"
+    "_time",
+    "_color"
 ]
 ANIMATORFORMATS = {
      "_position":       '[left/right, up/down, forw/backw, time (beat), "easing"]',
@@ -47,7 +48,8 @@ ANIMATORFORMATS = {
         "_scale":       '[left/right, up/down, forw/backw, time (beat), "easing"]',
      "_dissolve":       '[amount, time (beat), "easing"]',
 "_dissolveArrow":       '[amount, time (beat), "easing"]',
-         "_time":       '[lifespan, time (beat), "easing"]'
+         "_time":       '[lifespan, time (beat), "easing"]',
+        "_color":       '[red, green, blue, time, easing]'
 }
 EVENTTYPES = [
     "AnimateTrack",
@@ -94,22 +96,15 @@ class Animations():
     dissolveCube = "_dissolve"
     dissolveArrow = "_dissolveArrow"
     time = "_time"
+    color = "_color"
 
 class Editor():
     
     remove = 0
     change = 1
     add = 2
-    def __init__(self, CustomLevelPath):
-        '''
-        - `CustomLevelPath` The path where the `level.dat` is. (include `.dat`)
-        '''
-        if not os.path.exists(CustomLevelPath):
-            raise FileNotFoundError("This level.dat file does not exist.")
-        self.CustomLevelPath = CustomLevelPath
-
-        # Edit info.dat to have NoodleExtensions as a req
-        infodatpath = CustomLevelPath
+    def __updateDependencies(self, dependency):
+        infodatpath = self.CustomLevelPath
         infodatpath = infodatpath.split("\\")
         infodatpath.remove(infodatpath[len(infodatpath)-1])
         infodatpath.append("info.dat")
@@ -121,12 +116,23 @@ class Editor():
             for x in range(len(infodat["_difficultyBeatmapSets"])):
                 # warning: the next few lines are ugly.
                 for y in range(len(infodat["_difficultyBeatmapSets"][x]["_difficultyBeatmaps"])):
-                    if infodat["_difficultyBeatmapSets"][x]["_difficultyBeatmaps"][y]["_beatmapFilename"] == CustomLevelPath.split("\\")[len(CustomLevelPath.split("\\"))-1]: # if the difficulty is the same file as the one the user is using
+                    if infodat["_difficultyBeatmapSets"][x]["_difficultyBeatmaps"][y]["_beatmapFilename"] == self.CustomLevelPath.split("\\")[len(self.CustomLevelPath.split("\\"))-1]: # if the difficulty is the same file as the one the user is using
                         if infodat["_difficultyBeatmapSets"][x]["_difficultyBeatmaps"][y]["_customData"].get("_requirements") == None:
                             infodat["_difficultyBeatmapSets"][x]["_difficultyBeatmaps"][y]["_customData"]["_requirements"] = []
-                        if not "Noodle Extensions" in infodat["_difficultyBeatmapSets"][x]["_difficultyBeatmaps"][y]["_customData"]["_requirements"]:
-                            infodat["_difficultyBeatmapSets"][x]["_difficultyBeatmaps"][y]["_customData"]["_requirements"].append("Noodle Extensions")
+                        if not dependency in infodat["_difficultyBeatmapSets"][x]["_difficultyBeatmaps"][y]["_customData"]["_requirements"]:
+                            infodat["_difficultyBeatmapSets"][x]["_difficultyBeatmaps"][y]["_customData"]["_requirements"].append(dependency)
             json.dump(infodat, editinfodat)
+
+    def __init__(self, CustomLevelPath):
+        '''
+        - `CustomLevelPath` The path where the `level.dat` is. (include `.dat`)
+        '''
+        if not os.path.exists(CustomLevelPath):
+            raise FileNotFoundError("This level.dat file does not exist.")
+        self.CustomLevelPath = CustomLevelPath
+
+        # Edit info.dat to have NoodleExtensions as a req
+        self.__updateDependencies("Noodle Extensions")
 
     def EditBlock(self, beat, pos:tuple, track=None, false=False, interactable=True):
         '''
@@ -255,6 +261,11 @@ class Animator():
         
         if eventtype not in EVENTTYPES:
             raise IndexError(f"The provided event type {eventtype} is not valid")
+
+
+        if animationType == "_color":
+            # add chroma as a requirement if using _color
+            self.editor.__updateDependencies("Chroma")
         with open(self.editor.CustomLevelPath, 'r') as GetCustomEvents:
             ce = json.load(GetCustomEvents)
         with open(self.editor.CustomLevelPath, 'w') as EditCustomEvents:
