@@ -101,9 +101,9 @@ class Animations(Enum):
     color = "_color"
 
 class EditorMove(Enum):
-    remove
-    change
-    add
+    remove  = 0
+    change  = 1
+    add     = 2
 
 class Editor:
 
@@ -119,12 +119,12 @@ class Editor:
         with open(infodatpath, 'w') as editinfodat:
             for x in range(len(infodat["_difficultyBeatmapSets"])):
                 # warning: the next few lines are ugly.
-                for y in range(len(infodat["_difficultyBeatmapSets"][x]["_difficultyBeatmaps"])):
-                    if infodat["_difficultyBeatmapSets"][x]["_difficultyBeatmaps"][y]["_beatmapFilename"] == self.customLevelPath.split("\\")[len(self.customLevelPath.split("\\"))-1]: # if the difficulty is the same file as the one the user is using
-                        if infodat["_difficultyBeatmapSets"][x]["_difficultyBeatmaps"][y]["_customData"].get("_requirements") == None:
-                            infodat["_difficultyBeatmapSets"][x]["_difficultyBeatmaps"][y]["_customData"]["_requirements"] = []
-                        if not dependency in infodat["_difficultyBeatmapSets"][x]["_difficultyBeatmaps"][y]["_customData"]["_requirements"]:
-                            infodat["_difficultyBeatmapSets"][x]["_difficultyBeatmaps"][y]["_customData"]["_requirements"].append(dependency)
+                for _difficultyBeatmaps in infodat["_difficultyBeatmapSets"][x]["_difficultyBeatmaps"]:
+                    if _difficultyBeatmaps["_beatmapFilename"] == self.customLevelPath.split("\\")[len(self.customLevelPath.split("\\"))-1]: # if the difficulty is the same file as the one the user is using
+                        if _difficultyBeatmaps["_customData"].get("_requirements") == None:
+                            _difficultyBeatmaps["_customData"]["_requirements"] = []
+                        if not dependency in _difficultyBeatmaps["_customData"]["_requirements"]:
+                            _difficultyBeatmaps["_customData"]["_requirements"].append(dependency)
             json.dump(infodat, editinfodat)
 
     def __init__(self, customLevelPath):
@@ -155,16 +155,16 @@ class Editor:
         with open(self.customLevelPath, 'r') as editnote:
             notes = json.load(editnote)
         with open(self.customLevelPath, 'w') as editnote_:
-            for x in range(len(notes["_notes"])):
-                if notes["_notes"][x]["_time"] == beat and notes["_notes"][x]["_lineIndex"] == pos[0] and notes["_notes"][x]["_lineLayer"] == pos[1]:
+            for note in notes["_notes"]:
+                if note["_time"] == beat and note["_lineIndex"] == pos[0] and note["_lineLayer"] == pos[1]:
                     false = False if not interactable else False if not false else True # "Do note that if `interactable` is set to False, `false` will also be set to False. You don't want a block that will kill the player that cannot be hit."
                     if track == None:
-                        notes["_notes"][x]["_customData"] = {
+                        note["_customData"] = {
                             "_fake" : false,
                             "_interactable" : interactable
                         }
                     else:
-                        notes["_notes"][x]["_customData"] = {
+                        note["_customData"] = {
                             "_fake" : false,
                             "_interactable" : interactable,
                             "_track" : track
@@ -185,16 +185,16 @@ class Editor:
         with open(self.customLevelPath, 'r') as getWalls:
             walls = json.load(getWalls)
         with open(self.customLevelPath, 'w') as EditWalls:
-            for x in range(len(walls["_obstacles"])):
-                if walls["_obstalces"][x]["_time"] == beat and walls["_obstalces"][x]["_duration"] == length-beat and walls["_obstalces"][x]["_lineIndex"] == index: # if we're talking about the same wall
+            for obst in walls["_obstacles"]:
+                if obst["_time"] == beat and obst["_duration"] == length-beat and obst["_lineIndex"] == index: # if we're talking about the same wall
                     if track != None:
-                        walls["_obstacles"][x]["_customData"] = {
+                        obst["_customData"] = {
                             "_track" : track,
                             "_fake" : false,
                             "_interactable" : interactable
                         }
                     else:
-                        walls["_obstacles"][x]["_customData"] = {
+                        obst["_customData"] = {
                             "_fake" : false,
                             "_interactable" : interactable
                         }
