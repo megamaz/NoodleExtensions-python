@@ -138,7 +138,7 @@ class Editor:
         # Edit info.dat to have NoodleExtensions as a req
         self.updateDependencies("Noodle Extensions")
 
-    def EditBlock(self, beat, pos:tuple, track=None, false=False, interactable=True):
+    def editBlock(self, beat, pos:tuple, track=None, false=False, interactable=True):
         '''
         Edits a specific block/note (same thing)
         - `beat` The beat at which the block can be found.
@@ -171,7 +171,7 @@ class Editor:
                         }
             json.dump(notes, editnote_)
 
-    def EditWall(self, beat, length, index, track=None, false=False, interactable=True):
+    def editWall(self, beat, length, index, track=None, false=False, interactable=True):
         '''
         The exact same as EditNote except it's EditWall (edits a wall.)
         - `beat` The beat at which it starts
@@ -201,7 +201,7 @@ class Editor:
                     break
             json.dump(walls, EditWalls)
 
-    def EditEvent(self, time, EventType, track, editType:int, newData:dict=None):
+    def editEvent(self, time, EventType, track, editType:int, newData:dict=None):
         '''
         Edits a specific customEvent.
         - `time` the time at which the event occurs.
