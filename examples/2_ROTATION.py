@@ -6,10 +6,10 @@ animator = NoodleExtensions.Animator(editor)
 
 # Python tip! 
 # If you want to make the animating process be less repetitive, you can do this;
-editor.EditBlock(12, (1, 0), "RotateTrack")
-editor.EditBlock(12, (2, 0), "RotateTrack")
+editor.editBlock(12, (1, 0), "RotateTrack")
+editor.editBlock(12, (2, 0), "RotateTrack")
 def Animation(data, track, start, end):
-    animator.Animate("AnimateTrack", NoodleExtensions.Animations.rotation, data, track, start, end)
+    animator.animate("AnimateTrack", NoodleExtensions.Animations.rotation, data, track, start, end)
 
 # then just call the function!
 Animation([
