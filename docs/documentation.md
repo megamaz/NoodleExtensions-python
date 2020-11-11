@@ -87,4 +87,5 @@ animator.Animate("AnimateTrack", NoodleExtensions.Animations.rotation, [
 ], "RotationTrack", 5, 6)
 ```
 The code above then gives us this result:\
-![Rotate](images/rotate.gif)
+![Rotate](images/rotate.gif)\
+The main difference between `_rotation` and `_localRotation` is the fact that `_rotation` will rotate from the World position (in between the feet on the ground) whilst `_localRotation` will be rotating from the block's position. (If you're animating a track, the blocks will not be rotated from their average position but from their own)

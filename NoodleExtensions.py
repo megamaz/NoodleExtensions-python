@@ -91,14 +91,14 @@ EASINGS = [
 
 class Animations(Enum):
     # this is for those who have autofill who can't remember the actual strings.
-    position = "_position"
-    rotation = "_rotation"
-    localRotation = "_localRotation"
-    scale = "_scale"
-    dissolveCube = "_dissolve"
-    dissolveArrow = "_dissolveArrow"
-    time = "_time"
-    color = "_color"
+    position         = "_position"
+    rotation         = "_rotation"
+    localRotation    = "_localRotation"
+    scale            = "_scale"
+    dissolveCube     = "_dissolve"
+    dissolveArrow    = "_dissolveArrow"
+    time             = "_time"
+    color            = "_color"
 
 class EditorMove(Enum):
     remove  = 0
@@ -107,7 +107,11 @@ class EditorMove(Enum):
 
 class Editor:
 
-    def updateDependencies(self, dependency):
+    def updateDependencies(self, dependency:str):
+        '''Update Dependencies adds a `_requirements` item. Do note it doesn't check if you have it installed nor does it check whether or not that dependency is real.\n
+        However, it does check whether or not it's already in the list. 
+        - `dependency` the string item you want to add to the `_requirements`
+        '''
         infodatpath = self.customLevelPath
         infodatpath = infodatpath.split("\\")
         infodatpath.remove(infodatpath[len(infodatpath)-1])
