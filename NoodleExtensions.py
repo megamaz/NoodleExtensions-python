@@ -143,8 +143,7 @@ class Editor:
         self.updateDependencies("Noodle Extensions")
 
     def editBlock(self, beat, pos:tuple, track=None, false=False, interactable=True):
-        '''
-        Edits a specific block/note (same thing)
+        '''Edits a specific block/note (same thing)
         - `beat` The beat at which the block can be found.
         - `pos` The position of the block (tuple). (0, 0) is found left-most row, bottom layer.
 
@@ -176,8 +175,7 @@ class Editor:
             json.dump(notes, editnote_)
 
     def editWall(self, beat, length, index, track=None, false=False, interactable=True):
-        '''
-        The exact same as EditNote except it's EditWall (edits a wall.)
+        '''The exact same as EditNote except it's EditWall (edits a wall.)
         - `beat` The beat at which it starts
         - `length` The beat at which it ends
         - `index` The row on which it's on (0 is left-most)
@@ -206,8 +204,7 @@ class Editor:
             json.dump(walls, EditWalls)
 
     def editEvent(self, time, EventType, track, editType:int, newData:dict=None):
-        '''
-        Edits a specific customEvent.
+        '''Edits a specific customEvent.
         - `time` the time at which the event occurs.
         - `EventType` the type of the even you want to edit.
         - `track` the track of the even you want to edit
