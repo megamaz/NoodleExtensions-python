@@ -89,21 +89,20 @@ EASINGS = [
     "easeInOutBounce"
 ]
 
-class Animations(Enum):
-    # this is for those who have autofill who can't remember the actual strings.
-    position         = "_position"
-    rotation         = "_rotation"
-    localRotation    = "_localRotation"
-    scale            = "_scale"
-    dissolveCube     = "_dissolve"
-    dissolveArrow    = "_dissolveArrow"
-    time             = "_time"
-    color            = "_color"
-
-class EditorMove(Enum):
-    remove  = 0
-    change  = 1
-    add     = 2
+class Constants:
+    class Animations(Enum):
+        position         = "_position"
+        rotation         = "_rotation"
+        localRotation    = "_localRotation"
+        scale            = "_scale"
+        dissolveCube     = "_dissolve"
+        dissolveArrow    = "_dissolveArrow"
+        time             = "_time"
+        color            = "_color"
+    class EditorEvent(Enum):
+        remove  = 0
+        change  = 1
+        add     = 2
 
 class Editor:
 
@@ -208,34 +207,34 @@ class Editor:
         - `time` the time at which the event occurs.
         - `EventType` the type of the even you want to edit.
         - `track` the track of the even you want to edit
-        - `editType` either EditorMove.remove, or EditorMove.change.\n
-        if using `EditorMove.remove`, then ignore the `newData` setting.
+        - `editType` either Constants.EditorEvent.remove, or Constants.EditorEvent.change.\n
+        if using `Constants.EditorEvent.remove`, then ignore the `newData` setting.
 
-        - `newData` The new data of the event. If using `EditorMove.remove` then ignore this.\n
-        If not using `EditorMove.remove`, then insert the new data using `Animator.animate` as it returns the data you want.
+        - `newData` The new data of the event. If using `Constants.EditorEvent.remove` then ignore this.\n
+        If not using `Constants.EditorEvent.remove`, then insert the new data using `Animator.animate` as it returns the data you want.
         '''
         with open(self.customLevelPath, 'r') as fd_get_events:
             events:dict = json.load(fd_get_events)
 
-        if editType != EditorMove.remove and newData is None: # if there's missing data and you're not removing
+        if editType != Constants.EditorEvent.remove and newData is None: # if there's missing data and you're not removing
             raise AttributeError("Missing newData setting, as you are not removing the event.")
 
         with open(self.customLevelPath, 'w') as fd_edit_events:
             customEvents = events["_customData"]["_customEvents"]
-            if editType == EditorMove.remove:
+            if editType == Constants.EditorEvent.remove:
                 for x in range(len(customEvents)):
                     if customEvents[x]["_type"] == EventType and customEvents[x]["_time"] == time and customEvents[x]["_data"]["_track"] == track: # a long line to just check whether or not the event is the correct one to remove.
                         customEvents.remove(customEvents[x])
                         break
                 json.dump(events, fd_edit_events)
 
-            elif editType == EditorMove.change:
+            elif editType == Constants.EditorEvent.change:
                 for x in range(len(customEvents)):
                     if customEvents[x]["_type"] == EventType and customEvents[x]["_time"] == time and customEvents[x]["_data"]["_track"] == track:
                         customEvents[x] = newData
                         break
 
-            elif editType == EditorMove.add:
+            elif editType == Constants.EditorEvent.add:
                 for x in range(len(customEvents)):
                     if customEvents[x]["_type"] == EventType and customEvents[x]["_time"] == time and customEvents[x]["_data"]["_track"] == track:
                         customEvents[x]["_data"] == newData["_data"] # FIXME wtf
@@ -251,6 +250,8 @@ class Animator:
 
     def animate(self, eventtype, animationType, data:list, track, start, end) -> dict:
         '''Animates a block and returns the Event's dictionary.
+        This doesn't support `AssignTrackParent` and `AssignPlayerToTrack`.\n
+        Instead, use `Animator.editTrack`
 
         - `data` (list) that should look something like this;
         - `eventtype` what kind of animation is this (NoodleExtensions.EVENTTYPES)
@@ -309,6 +310,57 @@ class Animator:
                         animationType:data
                     }
                 }
+    def editTrack(self, eventType, time, tracks, parentTrack:str=None) -> dict:
+        '''Edit Track allows you to either do `AssignTrackParent` or `AssignPlayerToTrack` and returns the event
+        - `eventType` Either `AssignTrackParent` or `AssignPlayerToTrack`
+        - `time` The time (in beats) at which the event should happen
+        - `tracks` either a list of all the tracks you want to edit or a single track.
+        - `parentTrack` the track you want all of the `tracks` to be parented to. Only needed if using  `AssignTrackParent`
+        '''
+
+        tracks = tracks.split() if type(tracks) != list else tracks # Makes tracks a list if it is a string
+        if eventType == "AssignTrackParent" and parentTrack is None:
+            raise ValueError("Received AssignTrackParent but no parentTrack")
+        
+        if eventType == "AssignTrackParent":
+            event = {
+                "_time":time,
+                "_type":eventType,
+                "_data":{
+                    "_childrenTracks":tracks,
+                    "_parentTrack":parentTrack
+                }
+            }            
+            with open(self.editor.customLevelPath, 'r') as getEvents:
+                events = json.load(getEvents)
+
+            with open(self.editor.customLevelPath, 'w') as editEvents:
+                for customs in events["_customEvents"]:
+                    if customs == event: # if the event already exists
+                        return
+                events["_customEvents"].append(event)
+                json.dump(events, editEvents)
+            return event
+        
+        elif eventType == "AssignPlayerToTrack":
+            event = {
+                "_time":time,
+                "_type":eventType,
+                "_data":{
+                    "_track":tracks[0]
+                }
+            }
+
+            with open(self.editor.customLevelPath, 'r') as getEvents:
+                events = json.load(getEvents)
+            
+            with open(self.editor.customLevelPath, 'w') as editEvents:
+                for customs in events["_customEvents"]:
+                    if customs == event:
+                        return
+                events["_customEvents"].append(event)
+                json.dump(events, editEvents)
+
 
 if __name__ == "__main__":
     print("""
