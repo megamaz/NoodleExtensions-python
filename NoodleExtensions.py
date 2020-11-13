@@ -56,6 +56,10 @@ EVENTTYPES = [
     "AnimateTrack",
     "AssignPathAnimation"
 ]
+EVENTTYPESTRACK = [
+    "AssignTrackParent",
+    "AssignPlayerToTrack"
+]
 EASINGS = [
     "easeInsine",
     "easeOutSine",
@@ -99,6 +103,11 @@ class Constants:
         dissolveArrow    = "_dissolveArrow"
         time             = "_time"
         color            = "_color"
+    class AnimationTypes(Enum):
+        AnimateTrack        = "AnimateTrack"
+        AssignPathAnimation = "AssignPathAnimation"
+        AssignTrackParent   = "AssignTrackParent"
+        AssignPlayerToTrack = "AssignPlayerToTrack"
     class EditorEvent(Enum):
         remove  = 0
         change  = 1
