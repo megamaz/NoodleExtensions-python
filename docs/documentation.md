@@ -72,7 +72,8 @@ This above gives us this result;\
 
 ## _rotation and _localRotation
 [Example Script](https://github.com/megamaz/NoodleExtensions-python/tree/master/examples/2_ROTATION.py)\
-The rotation and localRotation both use the same settings: `[pitch, yaw, roll, time, easing]` (you can think of the rotation as a stick going through the block, and the block rotating from that stick)
+The rotation and localRotation both use the same settings: `[pitch, yaw, roll, time, easing]` (you can think of the rotation as a stick going through the block, and the block rotating from that stick)\
+[Here](https://en.wikipedia.org/wiki/Aircraft_principal_axes#/media/File:Flight_dynamics_with_text_ortho.svg) is an image to help you remember which is pitch, yaw and roll.
 - pitch : left / right
 - yaw : top/down
 - roll : front/back

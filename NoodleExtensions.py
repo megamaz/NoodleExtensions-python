@@ -246,7 +246,7 @@ class Editor:
             elif editType == Constants.EditorEvent.add:
                 for x in range(len(customEvents)):
                     if customEvents[x]["_type"] == EventType and customEvents[x]["_time"] == time and customEvents[x]["_data"]["_track"] == track:
-                        customEvents[x]["_data"] == newData["_data"] # FIXME wtf
+                        customEvents[x]["_data"] = newData["_data"]
                         break
 class Animator:
 
