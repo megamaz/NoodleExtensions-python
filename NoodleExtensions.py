@@ -181,7 +181,17 @@ class Editor:
                             "_track" : track
                         }
             json.dump(notes, editnote_)
-
+    def getBlock(self, beat, pos:tuple):
+        '''Returns a note's data
+        - `beat` the beat at which the note can be found
+        - `pos` The position of the block (tuple). (0, 0) is found left-most row, bottom layer.
+        '''
+        with open(self.customLevelPath, 'r') as getNote:
+            notes = json.load(getNote)
+        
+        for x in notes["_notes"]:
+            if x["_time"] == beat and x["_lineIndex"] == pos[0] and x["_lineLayer"] == pos[1]:
+                return x
     def editWall(self, beat, length, index, track=None, false=False, interactable=True):
         '''The exact same as EditNote except it's EditWall (edits a wall.)
         - `beat` The beat at which it starts
@@ -319,6 +329,16 @@ class Animator:
                         animationType:data
                     }
                 }
+    def animateBlock(self, beat, pos:tuple, animationType, data):
+        if animationType not in ANIMATORTYPES:
+            raise ValueError("Incorrect animation type")
+
+        note = self.editor.getBlock(beat, pos)
+        note["_customData"] = {
+            animationType:data
+        }
+        return note["_customData"]
+
     def editTrack(self, eventType, time, tracks, parentTrack:str=None) -> dict:
         '''Edit Track allows you to either do `AssignTrackParent` or `AssignPlayerToTrack` and returns the event
         - `eventType` Either `AssignTrackParent` or `AssignPlayerToTrack`
