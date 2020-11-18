@@ -48,10 +48,7 @@ animator = NoodleExtensions.Animator(editor) # this is the line to set up an ani
 ```
 The animator can currently only animate tracks and path animations. `AssignPlayerToTrack` and `AssignTrackParent` are soon to come!\
 It is recommended that any animation either start at 1-1.5 beats before the actual animation. This prevents the gif shown in [_position](#_position) from happening where the notes blips into position while it's moving towards the player. If that is your intended effect, then have at it.\
-Animation quick guide:
-- [`_position`](#_position)
-- [`_rotation`](#_rotation-and-_localrotation)
-## _position
+## Example
 [Example Script](https://github.com/megamaz/NoodleExtensions-python/blob/master/examples/1_POSITION.py)\
 The position setting works like this: `[x, y, z, time, easing]`. Here's a reference to each;
 - x : left/right
@@ -62,31 +59,21 @@ The position setting works like this: `[x, y, z, time, easing]`. Here's a refere
 Here is the in-line usage;
 ```py
 . . .
-animator.Animate("AnimateTrack", NoodleExtensions.Animations.position, [
+animator.Animate("AnimateTrack", NoodleExtensions.Constants.Animations.position, [
     [0, 10, 0, 0],
     [0, 0, 0, 1, "easeOutBounce"]
 ], "BounceTrack", 3, 4)
 ```
 This above gives us this result;\
-![Bounce](images/bounce.gif)
+![Bounce](images/bounce.gif)\
 
-## _rotation and _localRotation
-[Example Script](https://github.com/megamaz/NoodleExtensions-python/tree/master/examples/2_ROTATION.py)\
-The rotation and localRotation both use the same settings: `[pitch, yaw, roll, time, easing]` (you can think of the rotation as a stick going through the block, and the block rotating from that stick)\
-[Here](https://en.wikipedia.org/wiki/Aircraft_principal_axes#/media/File:Flight_dynamics_with_text_ortho.svg) is an image to help you remember which is pitch, yaw and roll.
-- pitch : left / right
-- yaw : top/down
-- roll : front/back
-- time : the time in which the animation should happen, ranging from 0-1, start-end
-- easing : How the block should move during the animation. Gained from NoodleExtensions.EASINGS or [easings.net](https://easings.net).
-Inline usage looks like this;
-```py
-. . .
-animator.Animate("AnimateTrack", NoodleExtensions.Animations.rotation, [
-    [0, 0, 0, 0],
-    [0, 0, 180, 1, "easeInOutBack"]
-], "RotationTrack", 5, 6)
-```
-The code above then gives us this result:\
-![Rotate](images/rotate.gif)\
-The main difference between `_rotation` and `_localRotation` is the fact that `_rotation` will rotate from the World position (in between the feet on the ground) whilst `_localRotation` will be rotating from the block's position. (If you're animating a track, the blocks will not be rotated from their average position but from their own)
+## Animation Formats
+To animate everything, you're gonna need to do what you did above; provide the animation type then a list. The list is the animation type's format, or how the list is supposed to look. Here's how they're supposed to look\ 
+- _position         `[left/right, up/down, forw/backw, time (beat), "easing"]`
+- _rotation         `[pitch, yaw, roll, time (beat), "easing"]`
+- _localRotation    `[pitch, yaw, roll, time (beat), "easing"]`
+- _scale            `[left/right, up/down, forw/backw, time (beat), "easing"]`
+- _dissolve         `[amount, time (beat), "easing"]`
+- _dissolveArrow    `[amount, time (beat), "easing"]`
+- _time             `[lifespan, time (beat), "easing"]`
+- _color            `[red, green, blue, time, easing`
