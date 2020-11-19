@@ -22,6 +22,8 @@ import json, os
 from pathlib import Path
 from enum import Enum
 
+from . import constants
+
 
 PATHSWINDOWS = { # A list of internal Beat Saber download paths.
     "Steam":r"C:\Program Files (x86)\Steam\steamapps\common\Beat Saber",
@@ -93,25 +95,6 @@ EASINGS = [
     "easeInOutBounce"
 ]
 
-class Constants:
-    class Animations(Enum):
-        position         = "_position"
-        rotation         = "_rotation"
-        localRotation    = "_localRotation"
-        scale            = "_scale"
-        dissolveCube     = "_dissolve"
-        dissolveArrow    = "_dissolveArrow"
-        time             = "_time"
-        color            = "_color"
-    class AnimationTypes(Enum):
-        AnimateTrack        = "AnimateTrack"
-        AssignPathAnimation = "AssignPathAnimation"
-        AssignTrackParent   = "AssignTrackParent"
-        AssignPlayerToTrack = "AssignPlayerToTrack"
-    class EditorEvent(Enum):
-        remove  = 0
-        change  = 1
-        add     = 2
 
 class Editor:
 
@@ -226,34 +209,34 @@ class Editor:
         - `time` the time at which the event occurs.
         - `EventType` the type of the even you want to edit.
         - `track` the track of the even you want to edit
-        - `editType` either Constants.EditorEvent.remove, or Constants.EditorEvent.change.\n
-        if using `Constants.EditorEvent.remove`, then ignore the `newData` setting.
+        - `editType` either constants.EditorEvent.remove, or constants.EditorEvent.change.\n
+        if using `constants.EditorEvent.remove`, then ignore the `newData` setting.
 
-        - `newData` The new data of the event. If using `Constants.EditorEvent.remove` then ignore this.\n
-        If not using `Constants.EditorEvent.remove`, then insert the new data using `Animator.animate` as it returns the data you want.
+        - `newData` The new data of the event. If using `constants.EditorEvent.remove` then ignore this.\n
+        If not using `constants.EditorEvent.remove`, then insert the new data using `Animator.animate` as it returns the data you want.
         '''
         with open(self.customLevelPath, 'r') as fd_get_events:
             events:dict = json.load(fd_get_events)
 
-        if editType != Constants.EditorEvent.remove and newData is None: # if there's missing data and you're not removing
+        if editType != constants.EditorEvent.remove and newData is None: # if there's missing data and you're not removing
             raise AttributeError("Missing newData setting, as you are not removing the event.")
 
         with open(self.customLevelPath, 'w') as fd_edit_events:
             customEvents = events["_customData"]["_customEvents"]
-            if editType == Constants.EditorEvent.remove:
+            if editType == constants.EditorEvent.remove:
                 for x in range(len(customEvents)):
                     if customEvents[x]["_type"] == EventType and customEvents[x]["_time"] == time and customEvents[x]["_data"]["_track"] == track: # a long line to just check whether or not the event is the correct one to remove.
                         customEvents.remove(customEvents[x])
                         break
                 json.dump(events, fd_edit_events)
 
-            elif editType == Constants.EditorEvent.change:
+            elif editType == constants.EditorEvent.change:
                 for x in range(len(customEvents)):
                     if customEvents[x]["_type"] == EventType and customEvents[x]["_time"] == time and customEvents[x]["_data"]["_track"] == track:
                         customEvents[x] = newData
                         break
 
-            elif editType == Constants.EditorEvent.add:
+            elif editType == constants.EditorEvent.add:
                 for x in range(len(customEvents)):
                     if customEvents[x]["_type"] == EventType and customEvents[x]["_time"] == time and customEvents[x]["_data"]["_track"] == track:
                         customEvents[x]["_data"] = newData["_data"]
