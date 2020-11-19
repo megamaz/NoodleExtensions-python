@@ -12,8 +12,8 @@ Quick Access (they are in order of which they must be completed.)
 # Editor 
 The editor is the key element to your script. It will be containing the actual level data. It's really simple to setup, here's an example in two lines;
 ```py
-import NoodleExtensions
-editor = NoodleExtensions.Editor("Your Level.dat Path")
+from noodle_extensions import Editor
+editor = Editor("Your Level.dat Path")
 ```
 It's really that simple. There's not much else to it.\
 To actually use the `editor` object you created, there's a few things you can do;
@@ -41,10 +41,10 @@ if doing anything else, there is a `newData` setting which will be a dictionary 
 The animator is what (you guessed it) will be taking care of all the animating. You NEED to have an [editor](#Editor) setup for the Animator to work. There is no skipping that step.\
 Here is a quick example of setting up an Animator;
 ```py
-import NoodleExtensions
-editor = NoodleExtensions.Editor("Your Level.dat Path")
+from noodle_extensions import Editor, Animator
+editor = Editor("Your Level.dat Path")
 
-animator = NoodleExtensions.Animator(editor) # this is the line to set up an animator. Really, not that hard!
+animator = Animator(editor) # this is the line to set up an animator. Really, not that hard!
 ```
 The animator can currently only animate tracks and path animations. `AssignPlayerToTrack` and `AssignTrackParent` are soon to come!\
 It is recommended that any animation either start at 1-1.5 beats before the actual animation. This prevents the gif shown in [_position](#_position) from happening where the notes blips into position while it's moving towards the player. If that is your intended effect, then have at it.\
@@ -58,8 +58,9 @@ The position setting works like this: `[x, y, z, time, easing]`. Here's a refere
 - easing : How the block should move during the animation. Gained from NoodleExtensions.EASINGS or [easings.net](https://easings.net).
 Here is the in-line usage;
 ```py
+from noodle_extensions import Editor, Animator, Animations
 . . .
-animator.Animate("AnimateTrack", NoodleExtensions.Constants.Animations.position, [
+animator.Animate("AnimateTrack", Animations.position, [
     [0, 10, 0, 0],
     [0, 0, 0, 1, "easeOutBounce"]
 ], "BounceTrack", 3, 4)
