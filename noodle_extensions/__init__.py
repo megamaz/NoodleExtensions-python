@@ -169,7 +169,6 @@ class Editor:
                         }
                     json.dump(notes, editnote_)
                     return note
-            return "Couldn't find note"
 
     def editWall(self, beat:int, length:int, index:int, track:str=None, false:bool=False, interactable:bool=True) -> dict:
         '''The exact same as EditNote except it's EditWall (edits a wall.) Returns the wall's data
