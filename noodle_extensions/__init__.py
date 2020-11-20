@@ -164,7 +164,7 @@ class Editor:
                             "_track" : track
                         }
             json.dump(notes, editnote_)
-    def getBlock(self, beat, pos:tuple):
+    def getBlock(self, beat, pos:tuple) -> dict:
         '''Returns a note's data
         - `beat` the beat at which the note can be found
         - `pos` The position of the block (tuple). (0, 0) is found left-most row, bottom layer.
@@ -174,6 +174,18 @@ class Editor:
         
         for x in notes["_notes"]:
             if x["_time"] == beat and x["_lineIndex"] == pos[0] and x["_lineLayer"] == pos[1]:
+                return x
+    def getWall(self, beat, index, length) -> dict:
+        '''Returns a wall's data.
+        - `beat` the beat at which the wall starts.
+        - `index` the row on which the left side of the wall is (0 is left-most)
+        - `length` how long the wall lasts (in beats)
+        '''
+        with open(self.customLevelPath, 'r') as getNote:
+            notes = json.load(getNote)
+        
+        for x in notes["_obstacles"]:
+            if x["_time"] == beat and x["_lineIndex"] == index and x["_duration"] == length:
                 return x
     def editWall(self, beat, length, index, track=None, false=False, interactable=True):
         '''The exact same as EditNote except it's EditWall (edits a wall.)
@@ -312,16 +324,53 @@ class Animator:
                         animationType:data
                     }
                 }
-    def animateBlock(self, beat, pos:tuple, animationType, data):
+    def animateBlock(self, beat, pos:tuple, animationType, data) -> dict:
+        '''Animate a specific note. (Returns the note's `_customData` property)
+        - `beat` the beat at which the note can be found
+        - `pos` The (x, y) position where the note is. (0, 0) is found left-most row, bottom layer.
+        - `animationType` the property you want to animate. 
+        - `data` how the note should be animated
+        '''
         if animationType not in ANIMATORTYPES:
             raise ValueError("Incorrect animation type")
 
-        note = self.editor.getBlock(beat, pos)
-        note["_customData"] = {
-            animationType:data
-        }
-        return note["_customData"]
+        with open(self.editor.customLevelPath, 'w') as editNote:
+                notes = json.load(editNote)
+                note = self.editor.getBlock(beat, pos)
+                for x in notes["_notes"]:
+                    if note == x:
+                        x["_customData"] = {
+                            animationType:data
+                        }
+                        json.dump(notes, editNote)
+                        note["_customData"] = x["_customData"]
+                        break
 
+
+        return note["_customData"]
+    
+    def animateWall(self, beat, length, index, animationType, data):
+        '''Animates a specific wall.
+        - `beat` the beat at which the wall starts.
+        - `length` the length (in beat) of how long the wall is.
+        - `index` 
+        '''
+        if animationType not in ANIMATORTYPES:
+            raise ValueError("Incorrect animation type")
+        
+        with open(self.editor.customLevelPath, 'w') as editWall:
+            walls = json.load(editWall)
+            wall = self.editor.getWall(beat, index, length)
+            for x in walls["_obstacles"]:
+                if x == wall:
+                    x["_customData"] = {
+                        animationType:data
+                    }
+                    json.dump(walls, editWall)
+                    wall["_customData"] = x["_customData"]
+                    break
+        
+        return wall["_customData"]
     def editTrack(self, eventType, time, tracks, parentTrack:str=None) -> dict:
         '''Edit Track allows you to either do `AssignTrackParent` or `AssignPlayerToTrack` and returns the event
         - `eventType` Either `AssignTrackParent` or `AssignPlayerToTrack`
