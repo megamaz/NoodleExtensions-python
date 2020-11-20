@@ -4,3 +4,5 @@ __pycache__
 main.spec
 examples/NoodleExtensions.py
 documentation.zip
+# testing files will be ignored
+test_pytest.py

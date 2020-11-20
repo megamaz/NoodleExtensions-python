@@ -98,9 +98,10 @@ EASINGS = [
 
 class Editor:
 
-    def updateDependencies(self, dependency:str):
+    def updateDependencies(self, dependency:str) -> list:
         '''Update Dependencies adds a `_requirements` item. Do note it doesn't check if you have it installed nor does it check whether or not that dependency is real.\n
-        However, it does check whether or not it's already in the list. 
+        However, it does check whether or not it's already in the list.\n
+        Returns the list of dependencies.
         - `dependency` the string item you want to add to the `_requirements`
         '''
         infodatpath = self.customLevelPath
@@ -120,21 +121,24 @@ class Editor:
                             _difficultyBeatmaps["_customData"]["_requirements"] = []
                         if not dependency in _difficultyBeatmaps["_customData"]["_requirements"]:
                             _difficultyBeatmaps["_customData"]["_requirements"].append(dependency)
-            json.dump(infodat, editinfodat)
+                    json.dump(infodat, editinfodat)
+                    return _difficultyBeatmaps["_customData"]["_requirements"]
 
-    def __init__(self, customLevelPath):
+    def __init__(self, customLevelPath:str):
         '''
         - `customLevelPath` The path where the `level.dat` is. (include `.dat`)
         '''
         if not os.path.exists(customLevelPath):
             raise FileNotFoundError("This level.dat file does not exist.")
+        elif not customLevelPath.endswith(".dat"):
+            raise FileNotFoundError("Please include the .dat / make sure you include the level.dat at the end of the directory")
         self.customLevelPath = customLevelPath
 
         # Edit info.dat to have NoodleExtensions as a req
         self.updateDependencies("Noodle Extensions")
 
-    def editBlock(self, beat, pos:tuple, track=None, false=False, interactable=True):
-        '''Edits a specific block/note (same thing)
+    def editBlock(self, beat:int, pos:tuple, track:str=None, false:bool=False, interactable:bool=True) -> dict:
+        '''Edits a specific block/note (same thing) Returns the note's data
         - `beat` The beat at which the block can be found.
         - `pos` The position of the block (tuple). (0, 0) is found left-most row, bottom layer.
 
@@ -152,7 +156,7 @@ class Editor:
             for note in notes["_notes"]:
                 if note["_time"] == beat and note["_lineIndex"] == pos[0] and note["_lineLayer"] == pos[1]:
                     false = False if not interactable else False if not false else True # "Do note that if `interactable` is set to False, `false` will also be set to False. You don't want a block that will kill the player that cannot be hit."
-                    if track == None:
+                    if track is None:
                         note["_customData"] = {
                             "_fake" : false,
                             "_interactable" : interactable
@@ -163,32 +167,12 @@ class Editor:
                             "_interactable" : interactable,
                             "_track" : track
                         }
-            json.dump(notes, editnote_)
-    def getBlock(self, beat, pos:tuple) -> dict:
-        '''Returns a note's data
-        - `beat` the beat at which the note can be found
-        - `pos` The position of the block (tuple). (0, 0) is found left-most row, bottom layer.
-        '''
-        with open(self.customLevelPath, 'r') as getNote:
-            notes = json.load(getNote)
-        
-        for x in notes["_notes"]:
-            if x["_time"] == beat and x["_lineIndex"] == pos[0] and x["_lineLayer"] == pos[1]:
-                return x
-    def getWall(self, beat, index, length) -> dict:
-        '''Returns a wall's data.
-        - `beat` the beat at which the wall starts.
-        - `index` the row on which the left side of the wall is (0 is left-most)
-        - `length` how long the wall lasts (in beats)
-        '''
-        with open(self.customLevelPath, 'r') as getNote:
-            notes = json.load(getNote)
-        
-        for x in notes["_obstacles"]:
-            if x["_time"] == beat and x["_lineIndex"] == index and x["_duration"] == length:
-                return x
-    def editWall(self, beat, length, index, track=None, false=False, interactable=True):
-        '''The exact same as EditNote except it's EditWall (edits a wall.)
+                    json.dump(notes, editnote_)
+                    return note
+            return "Couldn't find note"
+
+    def editWall(self, beat:int, length:int, index:int, track:str=None, false:bool=False, interactable:bool=True) -> dict:
+        '''The exact same as EditNote except it's EditWall (edits a wall.) Returns the wall's data
         - `beat` The beat at which it starts
         - `length` The beat at which it ends
         - `index` The row on which it's on (0 is left-most)
@@ -202,7 +186,7 @@ class Editor:
         with open(self.customLevelPath, 'w') as EditWalls:
             for obst in walls["_obstacles"]:
                 if obst["_time"] == beat and obst["_duration"] == length-beat and obst["_lineIndex"] == index: # if we're talking about the same wall
-                    if track != None:
+                    if track is not None:
                         obst["_customData"] = {
                             "_track" : track,
                             "_fake" : false,
@@ -213,10 +197,34 @@ class Editor:
                             "_fake" : false,
                             "_interactable" : interactable
                         }
-                    break
-            json.dump(walls, EditWalls)
+                    json.dump(walls, EditWalls)
+                    return obst
+    def getBlock(self, beat:int, pos:tuple) -> dict:
+        '''Returns a note's data
+        - `beat` the beat at which the note can be found
+        - `pos` The position of the block (tuple). (0, 0) is found left-most row, bottom layer.
+        '''
+        with open(self.customLevelPath, 'r') as getNote:
+            notes = json.load(getNote)
+        
+        for x in notes["_notes"]:
+            if x["_time"] == beat and x["_lineIndex"] == pos[0] and x["_lineLayer"] == pos[1]:
+                return x
+    def getWall(self, beat:int, index:int, length:int) -> dict:
+        '''Returns a wall's data.
+        - `beat` the beat at which the wall starts.
+        - `index` the row on which the left side of the wall is (0 is left-most)
+        - `length` how long the wall lasts (in beats)
+        '''
+        with open(self.customLevelPath, 'r') as getNote:
+            notes = json.load(getNote)
+        
+        for x in notes["_obstacles"]:
+            if x["_time"] == beat and x["_lineIndex"] == index and x["_duration"] == length:
+                return x
+            
 
-    def editEvent(self, time, EventType, track, editType:int, newData:dict=None):
+    def editEvent(self, time:int, EventType:str, track:str, editType:int, newData:dict=None):
         '''Edits a specific customEvent.
         - `time` the time at which the event occurs.
         - `EventType` the type of the even you want to edit.
