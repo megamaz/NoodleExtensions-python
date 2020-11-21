@@ -19,7 +19,7 @@ setup(
         'Programming Language :: Python :: 3.9'
     ],
     keywords='Beat Saber, Noodle Extensions',
-    packages=find_packages(where='noodle_extensions'),
+    packages=find_packages(),
     python_requires='>=3.8, <4',
     project_urls={
         'Bug Reports': 'https://github.com/megamaz/NoodleExtensions-python/issues'
