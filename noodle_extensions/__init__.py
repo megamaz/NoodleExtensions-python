@@ -219,7 +219,7 @@ class Editor:
             notes = json.load(getNote)
         
         for x in notes["_obstacles"]:
-            if x["_time"] == beat and x["_lineIndex"] == index and x["_duration"] == length:
+            if x["_time"] == beat and x["_lineIndex"] == index and x["_duration"] == length-beat:
                 return x
             
 

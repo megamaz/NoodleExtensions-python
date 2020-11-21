@@ -32,11 +32,11 @@ Just go in the releases tab and download the latest version.
 ## Current Issues:
 *There are currently no known issues.*
 #### Currently testing features (checked features have been tested and are working)
-*  [X] Editor.updateDependencies
-*  [X] Editor.editBlock
-*  [X] Editor.editWall
-* [ ] Editor.getBlock
-* [ ] Editor.getWall
+* [X] Editor.updateDependencies
+* [X] Editor.editBlock
+* [X] Editor.editWall
+* [X] Editor.getBlock
+* [X] Editor.getWall
 * [ ] Editor.editEvent
 * [ ] Animator.animate
 * [ ] Animator.animateBlock
