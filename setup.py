@@ -16,6 +16,7 @@ setup(
     author='megamaz',
     classifiers = [
         'Development Status :: 4 - Beta',
+        'Programming Language :: Python :: 3.8'
         'Programming Language :: Python :: 3.9'
     ],
     keywords='Beat Saber, Noodle Extensions',
