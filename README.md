@@ -28,6 +28,17 @@ Just go in the releases tab and download the latest version.
 ## Extra notes:
 - Made entirely in python
 - Pull requests are appreciated. Someone needs to fix up my horid code.
+## Samples
+```py
+from noodle_extensions import Editor, Animator
+
+editor = Editor("YourLevel.datPath")
+animator = Animator(editor)
+
+# Animations can go here.
+# Basic position animation (that does nothing)
+animator.animate("AnimateTrack", "_position", [[0, 0]], "DummyTrach", 0, 3)
+```
 
 ## Current Issues:
 *There are currently no known issues.*
@@ -37,8 +48,8 @@ Just go in the releases tab and download the latest version.
 * [X] Editor.editWall
 * [X] Editor.getBlock
 * [X] Editor.getWall
-* [ ] Editor.editEvent
-* [ ] Animator.animate
+* [X] Editor.removeEvent
+* [X] Animator.animate
 * [ ] Animator.animateBlock
 * [ ] Animator.animateWall
 * [ ] Animator.editTrack
