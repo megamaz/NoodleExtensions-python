@@ -31,17 +31,18 @@ Just go in the releases tab and download the latest version.
 ## Samples
 ```py
 from noodle_extensions import Editor, Animator
+from noodle_extensions.constants import EventType, Animations
 
 editor = Editor("YourLevel.datPath")
 animator = Animator(editor)
 
 # Animations can go here.
 # Basic position animation (that does nothing)
-animator.animate("AnimateTrack", "_position", [[0, 0]], "DummyTrach", 0, 3)
+animator.animate(EventType().AnimateTrack, Animations().position, [[0, 0]], "DummyTrack", 0, 3)
 ```
 
 ## Current Issues:
-*There are currently no known issues.*
+None
 #### Currently testing features (checked features have been tested and are working)
 * [X] Editor.updateDependencies
 * [X] Editor.editBlock
@@ -50,6 +51,6 @@ animator.animate("AnimateTrack", "_position", [[0, 0]], "DummyTrach", 0, 3)
 * [X] Editor.getWall
 * [X] Editor.removeEvent
 * [X] Animator.animate
-* [ ] Animator.animateBlock
-* [ ] Animator.animateWall
-* [ ] Animator.editTrack
+* [X] Animator.animateBlock
+* [X] Animator.animateWall
+* [X] Animator.editTrack

@@ -11,7 +11,7 @@ animator = Animator(editor)
 editor.editBlock(6, (1, 0), "BounceTrack")
 
 # Then we would animate it to do so!
-animator.animate("AnimateTrack", Animations.position, [
+animator.animate("AnimateTrack", Animations().position, [
     [0, 10, 0, 0],
     [0, 0, 0, 1, "easeOutBounce"]
 ], "BounceTrack", 5, 6)

@@ -21,7 +21,6 @@
 import json, os
 from pathlib import Path
 from enum import Enum
-
 from . import constants
 
 
@@ -117,7 +116,7 @@ class Editor:
                 # warning: the next few lines are ugly.
                 for _difficultyBeatmaps in infodat["_difficultyBeatmapSets"][x]["_difficultyBeatmaps"]:
                     if _difficultyBeatmaps["_beatmapFilename"] == self.customLevelPath.split("\\")[len(self.customLevelPath.split("\\"))-1]: # if the difficulty is the same file as the one the user is using
-                        if _difficultyBeatmaps["_customData"].get("_requirements") == None:
+                        if _difficultyBeatmaps["_customData"].get("_requirements") is None:
                             _difficultyBeatmaps["_customData"]["_requirements"] = []
                         if not dependency in _difficultyBeatmaps["_customData"]["_requirements"]:
                             _difficultyBeatmaps["_customData"]["_requirements"].append(dependency)
@@ -169,6 +168,7 @@ class Editor:
                         }
                     json.dump(notes, editnote_)
                     return note
+            json.dump(notes, editnote_)
 
     def editWall(self, beat:int, length:int, index:int, track:str=None, false:bool=False, interactable:bool=True) -> dict:
         '''The exact same as EditNote except it's EditWall (edits a wall.) Returns the wall's data
@@ -198,6 +198,7 @@ class Editor:
                         }
                     json.dump(walls, EditWalls)
                     return obst
+            json.dump(walls, EditWalls)
     def getBlock(self, beat:int, pos:tuple) -> dict:
         '''Returns a note's data
         - `beat` the beat at which the note can be found
@@ -209,6 +210,7 @@ class Editor:
         for x in notes["_notes"]:
             if x["_time"] == beat and x["_lineIndex"] == pos[0] and x["_lineLayer"] == pos[1]:
                 return x
+        raise ValueError("Could not find note")
     def getWall(self, beat:int, index:int, length:int) -> dict:
         '''Returns a wall's data.
         - `beat` the beat at which the wall starts.
@@ -219,47 +221,53 @@ class Editor:
             notes = json.load(getNote)
         
         for x in notes["_obstacles"]:
-            if x["_time"] == beat and x["_lineIndex"] == index and x["_duration"] == length-beat:
+            if x["_time"] == beat and x["_lineIndex"] == index and x["_duration"] == length:
                 return x
+        raise ValueError("Could not find wall.")
+    def editEvent(self): # DEPRECATED
+        '''OBSOLETE / DEPRECATED
+        use removeEvent instead. (edit event is no longer supported)
+        '''
+    def removeEvent(self, time:int, EventType:str, track:str, animationType:str=None) -> dict:
+        '''Removes an event from the `_customEvents` list. (Returns the removed event's data)\n
+        If there is more than just the `animationType` provided in the event, it will only remove the `animationType` property of the animation.\n
+        Otherwise, it will remove the entire event.
+        - `time` the time at which the custom event happens
+        - `EventType` the event type that will get removed. (constants.EventType)
+        - `track` the track of the event that's to be removed
+        - `animationType` the animation type to remove (constants.Animations) leave empty to remove entire event
+        '''
+
+        if EventType not in EVENTTYPES:
+            raise ValueError("EventTypes is invalid")
+        elif animationType not in ANIMATORTYPES and animationType is not None:
+            raise ValueError("animationType is invalid")
+
+        with open(self.customLevelPath, 'r') as getData:
+            events = json.load(getData)
+        
+        with open(self.customLevelPath, 'w') as Remove:
+            
+            for x in events["_customData"]["_customEvents"]:
+                if x["_time"] == time and x["_type"] == EventType and x["_data"]["_track"] == track:
+                    if animationType is not None:
+                        if x["_data"].get(animationType) != None:
+                            totals = 0
+                            for y in x.keys():
+                                totals = totals+1 if y in ANIMATORTYPES else totals
+                            
+                            if totals > 1 and animationType is not None:
+                                del x["_data"][animationType]
+                                json.dump(events, Remove)
+                                return x
+                    else:
+                        events["_customData"]["_customEvents"].remove(x)
+                        json.dump(events, Remove)
+                        return x
+            json.dump(events, Remove)
+            
             
 
-    def editEvent(self, time:int, EventType:str, track:str, editType:int, newData:dict=None):
-        '''Edits a specific customEvent.
-        - `time` the time at which the event occurs.
-        - `EventType` the type of the even you want to edit.
-        - `track` the track of the even you want to edit
-        - `editType` either constants.EditorEvent.remove, or constants.EditorEvent.change.\n
-        if using `constants.EditorEvent.remove`, then ignore the `newData` setting.
-
-        - `newData` The new data of the event. If using `constants.EditorEvent.remove` then ignore this.\n
-        If not using `constants.EditorEvent.remove`, then insert the new data using `Animator.animate` as it returns the data you want.
-        '''
-        with open(self.customLevelPath, 'r') as fd_get_events:
-            events:dict = json.load(fd_get_events)
-
-        if editType != constants.EditorEvent.remove and newData is None: # if there's missing data and you're not removing
-            raise AttributeError("Missing newData setting, as you are not removing the event.")
-
-        with open(self.customLevelPath, 'w') as fd_edit_events:
-            customEvents = events["_customData"]["_customEvents"]
-            if editType == constants.EditorEvent.remove:
-                for x in range(len(customEvents)):
-                    if customEvents[x]["_type"] == EventType and customEvents[x]["_time"] == time and customEvents[x]["_data"]["_track"] == track: # a long line to just check whether or not the event is the correct one to remove.
-                        customEvents.remove(customEvents[x])
-                        break
-                json.dump(events, fd_edit_events)
-
-            elif editType == constants.EditorEvent.change:
-                for x in range(len(customEvents)):
-                    if customEvents[x]["_type"] == EventType and customEvents[x]["_time"] == time and customEvents[x]["_data"]["_track"] == track:
-                        customEvents[x] = newData
-                        break
-
-            elif editType == constants.EditorEvent.add:
-                for x in range(len(customEvents)):
-                    if customEvents[x]["_type"] == EventType and customEvents[x]["_time"] == time and customEvents[x]["_data"]["_track"] == track:
-                        customEvents[x]["_data"] = newData["_data"]
-                        break
 class Animator:
 
     def __init__(self, editor:Editor):
@@ -269,10 +277,11 @@ class Animator:
 
         self.editor = editor # this is as to be able to access the actual level.dat file.
 
-    def animate(self, eventtype, animationType, data:list, track, start, end) -> dict:
+    def animate(self, eventtype:str, animationType:str, data:list, track:str, start:int, end:int) -> dict:
         '''Animates a block and returns the Event's dictionary.
         This doesn't support `AssignTrackParent` and `AssignPlayerToTrack`.\n
-        Instead, use `Animator.editTrack`
+        Instead, use `Animator.editTrack`\n
+        If you want to re-animate a track's certain property, this script will change it and not dupe it.
 
         - `data` (list) that should look something like this;
         - `eventtype` what kind of animation is this (NoodleExtensions.EVENTTYPES)
@@ -287,7 +296,7 @@ class Animator:
         - `start` the start (in beats) where the animation should start
         - `end` the end (in beats) where the animation should end.
         '''
-
+        
         if animationType not in ANIMATORTYPES:
             raise IndexError(f"The provided animation type {animationType} is not valid.")
 
@@ -298,86 +307,97 @@ class Animator:
         if animationType == "_color":
             # add chroma as a requirement if using _color
             self.editor.updateDependencies("Chroma")
+        
         with open(self.editor.customLevelPath, 'r') as GetCustomEvents:
             ce = json.load(GetCustomEvents)
         with open(self.editor.customLevelPath, 'w') as EditCustomEvents:
-            if ce["_customData"].get("_customEvents") == None:
+            if ce["_customData"].get("_customEvents") is None:
                 ce["_customData"]["_customEvents"] = []
 
             for event in ce["_customData"]["_customEvents"]:
-                if event["_data"].get(animationType) is not None:
-                    if event["_data"][animationType] == data and event["_type"] == eventtype: # if that event already exists
-                        json.dump(ce, EditCustomEvents)
-                        return
-
-            ce["_customData"]["_customEvents"].append(
-                {
-                    "_time":start,
-                    "_type":eventtype,
-                    "_data":{
-                        "_track" : track,
-                        "_duration": end-start,
-                        animationType:data
-                    }
+                if event["_data"]["_track"] == track and event["_type"] == eventtype and event["_time"] == start and event["_data"]["_duration"] == (end-start):
+                    event["_data"][animationType] = data
+                    json.dump(ce, EditCustomEvents)
+                    return event
+            
+            newEvent = {
+                "_time": start,
+                "_type": eventtype,
+                "_data": {
+                    "_track": track,
+                    "_duration": end-start,
+                    animationType:data
                 }
-            )
+            }
+            ce["_customData"]["_customEvents"].append(newEvent)
             json.dump(ce, EditCustomEvents)
-            return  {
-                    "_time":start,
-                    "_type":eventtype,
-                    "_data":{
-                        "_track" : track,
-                        "_duration": end-start,
-                        animationType:data
-                    }
-                }
-    def animateBlock(self, beat, pos:tuple, animationType, data) -> dict:
+            return newEvent
+
+
+    def animateBlock(self, beat, pos:tuple, animationType:str, data) -> dict:
         '''Animate a specific note. (Returns the note's `_customData` property)
         - `beat` the beat at which the note can be found
         - `pos` The (x, y) position where the note is. (0, 0) is found left-most row, bottom layer.
         - `animationType` the property you want to animate. 
         - `data` how the note should be animated
         '''
-        if animationType not in ANIMATORTYPES:
+        
+        incorrect = True
+        for x in ANIMATORTYPES:
+            if x == animationType:
+                incorrect = False
+                break
+        if incorrect:
             raise ValueError("Incorrect animation type")
+        
+        with open(self.editor.customLevelPath, 'r') as getNote:
+            notes = json.load(getNote)
 
+        note = self.editor.getBlock(beat, pos)
         with open(self.editor.customLevelPath, 'w') as editNote:
-                notes = json.load(editNote)
-                note = self.editor.getBlock(beat, pos)
-                for x in notes["_notes"]:
-                    if note == x:
+            for x in notes["_notes"]:
+                if x == note:
+                    if x.get("_customData") is None:
                         x["_customData"] = {
                             animationType:data
                         }
-                        json.dump(notes, editNote)
-                        note["_customData"] = x["_customData"]
-                        break
+                    else:
+                        x["_customData"][animationType] = data
+            
+                    json.dump(notes, editNote)
+                    return x["_customData"]
 
 
-        return note["_customData"]
     
-    def animateWall(self, beat, length, index, animationType, data):
+    def animateWall(self, beat:int, length:int, index:int, animationType:str, data:list):
         '''Animates a specific wall.
         - `beat` the beat at which the wall starts.
         - `length` the length (in beat) of how long the wall is.
         - `index` 
         '''
-        if animationType not in ANIMATORTYPES:
+        incorrect = True
+        for x in ANIMATORTYPES:
+            if x == animationType:
+                incorrect = False
+                break
+        if incorrect:
             raise ValueError("Incorrect animation type")
         
-        with open(self.editor.customLevelPath, 'w') as editWall:
-            walls = json.load(editWall)
-            wall = self.editor.getWall(beat, index, length)
+        with open(self.editor.customLevelPath, 'r') as getWalls:
+            walls = json.load(getWalls)
+        
+        wall = self.editor.getWall(beat, index, length)
+        with open(self.editor.customLevelPath, 'w') as editWalls:
             for x in walls["_obstacles"]:
                 if x == wall:
-                    x["_customData"] = {
-                        animationType:data
-                    }
-                    json.dump(walls, editWall)
-                    wall["_customData"] = x["_customData"]
-                    break
-        
-        return wall["_customData"]
+                    if x.get("_customData") is None:
+                        x["_customData"] = {
+                            animationType: data
+                        }
+                    else:
+                        x["_customData"][animationType] = data
+                    json.dump(walls, editWalls)
+                    return x["_customData"]
     def editTrack(self, eventType, time, tracks, parentTrack:str=None) -> dict:
         '''Edit Track allows you to either do `AssignTrackParent` or `AssignPlayerToTrack` and returns the event
         - `eventType` Either `AssignTrackParent` or `AssignPlayerToTrack`
@@ -403,11 +423,11 @@ class Animator:
                 events = json.load(getEvents)
 
             with open(self.editor.customLevelPath, 'w') as editEvents:
-                for customs in events["_customEvents"]:
+                for customs in events["_customData"]["_customEvents"]:
                     if customs == event: # if the event already exists
-                        return
-                events["_customEvents"].append(event)
-                json.dump(events, editEvents)
+                        json.dump(events, editEvents)
+                        return event
+                events["_customData"]["_customEvents"].append(event)
             return event
         
         elif eventType == "AssignPlayerToTrack":
@@ -423,8 +443,10 @@ class Animator:
                 events = json.load(getEvents)
             
             with open(self.editor.customLevelPath, 'w') as editEvents:
-                for customs in events["_customEvents"]:
+                for customs in events["_customData"]["_customEvents"]:
                     if customs == event:
-                        return
-                events["_customEvents"].append(event)
+                        json.dump(events, editEvents)
+                        return event
+                events["_customData"]["_customEvents"].append(event)
                 json.dump(events, editEvents)
+                return event
