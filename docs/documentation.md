@@ -30,13 +30,15 @@ This is the same as EditBlock, except it's for a wall. It changes the `_customDa
 edit.EditWall(6, 6, 3, "ExampleTrack", False, True)
 ```
 The code above edited the wall to being a normal wall, just included the the `ExampleTrack` to it. The wall is set to be real and interactable.
-## EditEvent
-This one is to either Change, remove, or overwrite an event with a new one.\
-To remove an event, simply do this;
+## removeEvent
+To remove an event / property of an event. This is so that you can change it. `Animator.animate` does overwrite, but if you want to remove instead just do this.\
+Sample usage;
 ```py
-editor.EditEvent(6, "_eventExample", "ExampleTrack", editor.remove)
+# noodle extensions import setup
+. . .
+editor.removeEvent(5, "AnimateTrack", "ExampleTrack", "_position")
+# By example, this line right here would take an event a beat 5 who animates ExampleTrack and remove it's _position property.
 ```
-if doing anything else, there is a `newData` setting which will be a dictionary of the `_data` object that will be inside the `_customEvent` item.
 # Animator
 The animator is what (you guessed it) will be taking care of all the animating. You NEED to have an [editor](#Editor) setup for the Animator to work. There is no skipping that step.\
 Here is a quick example of setting up an Animator;
