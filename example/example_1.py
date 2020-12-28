@@ -1,4 +1,5 @@
-from noodle_extensions import Editor, Animator, Animations
+from noodle_extensions import Editor, Animator
+from noodle_extensions.constants import Animations
 
 # Setting up an editor object
 editor = Editor(r"C:\Program Files (x86)\Steam\steamapps\common\Beat Saber\Beat Saber_Data\CustomWIPLevels\ExampleLevel\EasyStandard.dat")

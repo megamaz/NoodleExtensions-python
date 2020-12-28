@@ -120,8 +120,8 @@ class Editor:
                             _difficultyBeatmaps["_customData"]["_requirements"] = []
                         if not dependency in _difficultyBeatmaps["_customData"]["_requirements"]:
                             _difficultyBeatmaps["_customData"]["_requirements"].append(dependency)
-                    json.dump(infodat, editinfodat)
-                    return _difficultyBeatmaps["_customData"]["_requirements"]
+                        json.dump(infodat, editinfodat)
+                        return _difficultyBeatmaps["_customData"]["_requirements"]
 
     def __init__(self, customLevelPath:str):
         '''
