@@ -18,17 +18,22 @@ P::::::::P          N::::::N       N:::::::NE::::::::::::::::::::EE:::::::::::::
 P::::::::P          N::::::N        N::::::NE::::::::::::::::::::EE::::::::::::::::::::E
 PPPPPPPPPP          NNNNNNNN         NNNNNNNEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
 ```
+## my to-do list
+If you want to know what's currently on my to-do list, you can go [here](https://trello.com/b/yA5qQTs7)! Pull requests, feedback, issues, and more are appreciated. If you'd like to contact me, you can do so on discord at `megamaz#1020`
 ## What is it?
 This is a Python Noodle Extensions Editor for Beat Saber levels. Manually editing a JSON file over a long period of time can get really annoying, so this should speed up the process!
 
 ## How do I use it?
 The docs can be found [Here!](https://github.com/megamaz/NoodleExtensions-python/blob/master/docs/documentation.md) (needs to be fixed and finished!)\
-Just go in the releases tab and download the latest version.
+As of installation, you can simply `pip install NoodleExtensions` and you'll be ready to `import noodle_extensions` inside your project.\
+No credits are required! Suprisingly a few people have asked me about that. this is just meant to be helpful and if you'd like to give credit that's fine.
 
 ## Extra notes:
 - Made entirely in python
 - Pull requests are appreciated. Someone needs to fix up my horid code.
-## Samples
+# Samples
+
+## Simple (blank) animation
 ```py
 from noodle_extensions import Editor, Animator
 from noodle_extensions.constants import EventType, Animations
