@@ -133,10 +133,10 @@ class Editor:
             raise FileNotFoundError("Please include the .dat / make sure you include the level.dat at the end of the directory")
         self.customLevelPath = customLevelPath
 
-        # Edit info.dat to have NoodleExtensions as a req
+        # Edit info.dat to have noodle_extensions as a req
         self.updateDependencies("Noodle Extensions")
 
-    def editBlock(self, beat:int, pos:tuple, track:str=None, false:bool=False, interactable:bool=True) -> dict:
+    def editBlock(self, beat:int, pos:tuple, track:str=None, fake:bool=False, interactable:bool=True) -> dict:
         '''Edits a specific block/note (same thing) Returns the note's data
         - `beat` The beat at which the block can be found.
         - `pos` The position of the block (tuple). (0, 0) is found left-most row, bottom layer.
@@ -154,15 +154,15 @@ class Editor:
         with open(self.customLevelPath, 'w') as editnote_:
             for note in notes["_notes"]:
                 if note["_time"] == beat and note["_lineIndex"] == pos[0] and note["_lineLayer"] == pos[1]:
-                    false = False if not interactable else False if not false else True # "Do note that if `interactable` is set to False, `false` will also be set to False. You don't want a block that will kill the player that cannot be hit."
+                    fake = False if not interactable else False if not fake else True # "Do note that if `interactable` is set to False, `false` will also be set to False. You don't want a block that will kill the player that cannot be hit."
                     if track is None:
                         note["_customData"] = {
-                            "_fake" : false,
+                            "_fake" : fake,
                             "_interactable" : interactable
                         }
                     else:
                         note["_customData"] = {
-                            "_fake" : false,
+                            "_fake" : fake,
                             "_interactable" : interactable,
                             "_track" : track
                         }
@@ -170,7 +170,7 @@ class Editor:
                     return note
             json.dump(notes, editnote_)
 
-    def editWall(self, beat:int, length:int, index:int, track:str=None, false:bool=False, interactable:bool=True) -> dict:
+    def editWall(self, beat:int, length:int, index:int, track:str=None, fake:bool=False, interactable:bool=True) -> dict:
         '''The exact same as EditNote except it's EditWall (edits a wall.) Returns the wall's data
         - `beat` The beat at which it starts
         - `length` The beat at which it ends
@@ -188,12 +188,12 @@ class Editor:
                     if track is not None:
                         obst["_customData"] = {
                             "_track" : track,
-                            "_fake" : false,
+                            "_fake" : fake,
                             "_interactable" : interactable
                         }
                     else:
                         obst["_customData"] = {
-                            "_fake" : false,
+                            "_fake" : fake,
                             "_interactable" : interactable
                         }
                     json.dump(walls, EditWalls)
@@ -224,11 +224,7 @@ class Editor:
             if x["_time"] == beat and x["_lineIndex"] == index and x["_duration"] == length:
                 return x
         raise ValueError("Could not find wall.")
-    def editEvent(self): # DEPRECATED
-        '''OBSOLETE / DEPRECATED
-        use removeEvent instead. (edit event is no longer supported)
-        '''
-    def removeEvent(self, time:int, EventType:str, track:str, animationType:str=None) -> dict:
+    def removeEvent(self, time:int, eventType:str, track:str, animationType:str=None) -> dict:
         '''Removes an event from the `_customEvents` list. (Returns the removed event's data)\n
         If there is more than just the `animationType` provided in the event, it will only remove the `animationType` property of the animation.\n
         Otherwise, it will remove the entire event.
@@ -238,7 +234,7 @@ class Editor:
         - `animationType` the animation type to remove (constants.Animations) leave empty to remove entire event
         '''
 
-        if EventType not in EVENTTYPES:
+        if eventType not in EVENTTYPES:
             raise ValueError("EventTypes is invalid")
         elif animationType not in ANIMATORTYPES and animationType is not None:
             raise ValueError("animationType is invalid")
@@ -249,7 +245,7 @@ class Editor:
         with open(self.customLevelPath, 'w') as Remove:
             
             for x in events["_customData"]["_customEvents"]:
-                if x["_time"] == time and x["_type"] == EventType and x["_data"]["_track"] == track:
+                if x["_time"] == time and x["_type"] == eventType and x["_data"]["_track"] == track:
                     if animationType is not None:
                         if x["_data"].get(animationType) != None:
                             totals = 0
@@ -277,20 +273,20 @@ class Animator:
 
         self.editor = editor # this is as to be able to access the actual level.dat file.
 
-    def animate(self, eventtype:str, animationType:str, data:list, track:str, start:int, end:int) -> dict:
+    def animate(self, eventType:str, animationType:str, data:list, track:str, start:int, end:int) -> dict:
         '''Animates a block and returns the Event's dictionary.
         This doesn't support `AssignTrackParent` and `AssignPlayerToTrack`.\n
         Instead, use `Animator.editTrack`\n
         If you want to re-animate a track's certain property, this script will change it and not dupe it.
 
         - `data` (list) that should look something like this;
-        - `eventtype` what kind of animation is this (NoodleExtensions.EVENTTYPES)
-        - `animationType` how the note should be animated. (NoodleExtensions.ANIMATIONTYPES)
+        - `eventType` what kind of animation is this (noodle_extensions.EVENTTYPES)
+        - `animationType` how the note should be animated. (noodle_extensions.ANIMATIONTYPES)
 
         It will be used to animate the blocks in the track.
-        - First few data points. (Gained from NoodleExtensions.TRACKANIMATIONFORMATS)
+        - First few data points. (Gained from noodle_extensions.TRACKANIMATIONFORMATS)
         - time  : The beat where the animation should start
-        - ease  : easings. The speed which the note should move between animations. (can be gained from `NoodleExtensions.EASINGSNET`)
+        - ease  : easings. The speed which the note should move between animations. (can be gained from `noodle_extensions.EASINGSNET`)
 
         - `track` the track you want to animate.
         - `start` the start (in beats) where the animation should start
@@ -300,8 +296,8 @@ class Animator:
         if animationType not in ANIMATORTYPES:
             raise IndexError(f"The provided animation type {animationType} is not valid.")
 
-        if eventtype not in EVENTTYPES:
-            raise IndexError(f"The provided event type {eventtype} is not valid")
+        if eventType not in EVENTTYPES:
+            raise IndexError(f"The provided event type {eventType} is not valid")
 
 
         if animationType == "_color":
@@ -315,14 +311,14 @@ class Animator:
                 ce["_customData"]["_customEvents"] = []
 
             for event in ce["_customData"]["_customEvents"]:
-                if event["_data"]["_track"] == track and event["_type"] == eventtype and event["_time"] == start and event["_data"]["_duration"] == (end-start):
+                if event["_data"]["_track"] == track and event["_type"] == eventType and event["_time"] == start and event["_data"]["_duration"] == (end-start):
                     event["_data"][animationType] = data
                     json.dump(ce, EditCustomEvents)
                     return event
             
             newEvent = {
                 "_time": start,
-                "_type": eventtype,
+                "_type": eventType,
                 "_data": {
                     "_track": track,
                     "_duration": end-start,
