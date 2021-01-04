@@ -47,9 +47,9 @@ animator.animate(EventType().AnimateTrack, Animations().position, [[0, 0]], "Dum
 ```
 
 ## Current Issues:
-None
+- `Editor().updateDependencies` does not work if there are multiple difficulties.
 #### Currently testing features (checked features have been tested and are working)
-* [X] Editor.updateDependencies
+* [ ] Editor.updateDependencies
 * [X] Editor.editBlock
 * [X] Editor.editWall
 * [X] Editor.getBlock
