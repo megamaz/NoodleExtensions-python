@@ -21,7 +21,7 @@
 import json, os
 from pathlib import Path
 from enum import Enum
-from . import constants
+from . import constants, exceptions
 
 
 PATHSWINDOWS = { # A list of internal Beat Saber download paths.
@@ -124,7 +124,7 @@ class Editor:
                         return _difficultyBeatmaps["_customData"]["_requirements"]
 
     def __init__(self, customLevelPath:str):
-        '''
+        '''The base editor for editing. This will not be animating.
         - `customLevelPath` The path where the `level.dat` is. (include `.dat`)
         '''
         if not os.path.exists(customLevelPath):
@@ -210,7 +210,7 @@ class Editor:
         for x in notes["_notes"]:
             if x["_time"] == beat and x["_lineIndex"] == pos[0] and x["_lineLayer"] == pos[1]:
                 return x
-        raise ValueError("Could not find note")
+        raise exceptions.NoteNotFoundError("Could not find note")
     def getWall(self, beat:int, index:int, length:int) -> dict:
         '''Returns a wall's data.
         - `beat` the beat at which the wall starts.
@@ -223,7 +223,7 @@ class Editor:
         for x in notes["_obstacles"]:
             if x["_time"] == beat and x["_lineIndex"] == index and x["_duration"] == length:
                 return x
-        raise ValueError("Could not find wall.")
+        raise exceptions.WallNotFoundError("Could not find wall.")
     def removeEvent(self, time:int, eventType:str, track:str, animationType:str=None) -> dict:
         '''Removes an event from the `_customEvents` list. (Returns the removed event's data)\n
         If there is more than just the `animationType` provided in the event, it will only remove the `animationType` property of the animation.\n
@@ -294,10 +294,10 @@ class Animator:
         '''
         
         if animationType not in ANIMATORTYPES:
-            raise IndexError(f"The provided animation type {animationType} is not valid.")
+            raise ValueError(f"The provided animation type {animationType} is not valid.")
 
         if eventType not in EVENTTYPES:
-            raise IndexError(f"The provided event type {eventType} is not valid")
+            raise ValueError(f"The provided event type {eventType} is not valid")
 
 
         if animationType == "_color":
@@ -404,7 +404,7 @@ class Animator:
 
         tracks = tracks.split() if type(tracks) != list else tracks # Makes tracks a list if it is a string
         if eventType == "AssignTrackParent" and parentTrack is None:
-            raise ValueError("Received AssignTrackParent but no parentTrack")
+            raise exceptions.NoParentTrack("Received AssignTrackParent but no parentTrack")
         
         if eventType == "AssignTrackParent":
             event = {
