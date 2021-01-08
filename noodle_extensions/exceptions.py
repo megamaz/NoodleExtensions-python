@@ -10,5 +10,5 @@ class WallNotFoundError(Exception):
 
 class NoParentTrack(Exception):
 
-    def __init__(self, message="The Specified wall couldn't be found"):
+    def __init__(self, message="Children Tracks were not given any parents"):
         super().__init__(message)
