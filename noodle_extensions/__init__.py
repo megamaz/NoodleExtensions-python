@@ -224,7 +224,8 @@ class Editor:
             if x["_time"] == beat and x["_lineIndex"] == index and x["_duration"] == length:
                 return x
         raise exceptions.WallNotFoundError("Could not find wall.")
-    def removeEvent(self, time:int, eventType:str, track:str, animationType:str=None) -> dict:
+
+    def removeEvent(self, beat:int, eventType:str, track:str, animationType:str=None) -> dict:
         '''Removes an event from the `_customEvents` list. (Returns the removed event's data)\n
         If there is more than just the `animationType` provided in the event, it will only remove the `animationType` property of the animation.\n
         Otherwise, it will remove the entire event.
@@ -245,7 +246,7 @@ class Editor:
         with open(self.customLevelPath, 'w') as Remove:
             
             for x in events["_customData"]["_customEvents"]:
-                if x["_time"] == time and x["_type"] == eventType and x["_data"]["_track"] == track:
+                if x["_time"] == beat and x["_type"] == eventType and x["_data"]["_track"] == track:
                     if animationType is not None:
                         if x["_data"].get(animationType) != None:
                             totals = 0
@@ -394,7 +395,7 @@ class Animator:
                         x["_customData"][animationType] = data
                     json.dump(walls, editWalls)
                     return x["_customData"]
-    def editTrack(self, eventType, time, tracks, parentTrack:str=None) -> dict:
+    def editTrack(self, eventType, beat, tracks, parentTrack:str=None) -> dict:
         '''Edit Track allows you to either do `AssignTrackParent` or `AssignPlayerToTrack` and returns the event
         - `eventType` Either `AssignTrackParent` or `AssignPlayerToTrack`
         - `time` The time (in beats) at which the event should happen
@@ -402,13 +403,13 @@ class Animator:
         - `parentTrack` the track you want all of the `tracks` to be parented to. Only needed if using  `AssignTrackParent`
         '''
 
-        tracks = tracks.split() if type(tracks) != list else tracks # Makes tracks a list if it is a string
+        tracks = tracks.split() # Makes tracks a list if it is a string
         if eventType == "AssignTrackParent" and parentTrack is None:
             raise exceptions.NoParentTrack("Received AssignTrackParent but no parentTrack")
         
         if eventType == "AssignTrackParent":
             event = {
-                "_time":time,
+                "_time":beat,
                 "_type":eventType,
                 "_data":{
                     "_childrenTracks":tracks,
@@ -428,7 +429,7 @@ class Animator:
         
         elif eventType == "AssignPlayerToTrack":
             event = {
-                "_time":time,
+                "_time":beat,
                 "_type":eventType,
                 "_data":{
                     "_track":tracks[0]
