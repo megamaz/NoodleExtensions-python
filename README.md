@@ -52,10 +52,10 @@ I will not be accepting any form of pull request if the test files have not been
 2. Edit code 
 3. *Test* your code
 4. If check 3 is done, move on to step 5
-5. Make the pull request
-  a. Give it a meaningful title. 
-  b. Give it a meaningful description.
-  c. I'll review it when I have time. I'm a busy man
+5. Make the pull request\
+  a. Give it a meaningful title. \
+  b. Give it a meaningful description.\
+  c. I'll review it when I have time. I'm a busy man\
 ## Current Issues:
 None (Contact me at `megamaz#1020` if you run into any issues)
 #### Currently testing features (checked features have been tested and are working)
