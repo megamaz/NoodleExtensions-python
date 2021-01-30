@@ -1,0 +1,93 @@
+{
+    "_version": "2.2.0",
+    "_customData": {
+        "_time": 0,
+        "_BPMChanges": [],
+        "_bookmarks": [],
+        "_customEvents": [
+            {
+                "_time": 1,
+                "_type": "AnimateTrack",
+                "_data": {
+                    "_track": "TestTrack",
+                    "_duration": 1,
+                    "_position": [
+                        [
+                            0,
+                            500,
+                            0,
+                            0
+                        ],
+                        [
+                            0,
+                            0,
+                            0,
+                            1,
+                            "easeOutBounce"
+                        ]
+                    ]
+                }
+            },
+            {
+                "_time": 1,
+                "_type": "AssignPathAnimation",
+                "_data": {
+                    "_track": "TestTrack",
+                    "_duration": 10,
+                    "_scale": [
+                        [
+                            1,
+                            1,
+                            2,
+                            0
+                        ]
+                    ]
+                }
+            },
+            {
+                "_time": 4,
+                "_type": "AssignPlayerToTrack",
+                "_data": {
+                    "_track": "Haha player is child"
+                }
+            },
+            {
+                "_time": 1,
+                "_type": "AssignTrackParent",
+                "_data": {
+                    "_childrenTracks": [
+                        "TestTrack01",
+                        "TestTrack02"
+                    ],
+                    "_parentTrack": "ParentTrack"
+                }
+            }
+        ]
+    },
+    "_events": [],
+    "_notes": [
+        {
+            "_time": 1,
+            "_lineIndex": 1,
+            "_lineLayer": 1,
+            "_type": 0,
+            "_cutDirection": 8,
+            "_customData": {
+                "_track": "TestTrack"
+            }
+        }
+    ],
+    "_obstacles": [
+        {
+            "_time": 1,
+            "_lineIndex": 1,
+            "_type": 1,
+            "_duration": 4,
+            "_width": 1,
+            "_customData": {
+                "_track": "ThereIsNoTrack"
+            }
+        }
+    ],
+    "_waypoints": []
+}

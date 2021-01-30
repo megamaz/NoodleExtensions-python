@@ -11,3 +11,5 @@ venv
 NoodleExtensions.egg-info
 dist
 Releases
+.vscode
+*.bat
