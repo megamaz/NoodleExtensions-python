@@ -32,8 +32,8 @@ import noodleExtensions as NE
 editor = NE.NoodleExtensions(r"level.datpath")
 
 # assign to a new track
-dropNote = NE.Note(5, 1, 0, 0, 8, _track="FallDownTrack")
-editor.createNote(dropNote)
+dropNote = NE.Note(5, 1, 0, 0, 8)
+editor.editNote(dropNote, NE.Note(5, 1, 0, 0, 8, _track="FallDownTrack"))
 
 FallDownTrack = NE.AnimateTrack(2, "FallDownTrack", 2, _position=[
   [0, 100, 0, 0], # be in the sky before it appears
