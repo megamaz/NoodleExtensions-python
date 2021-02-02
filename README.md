@@ -24,7 +24,7 @@ If you want to know what's currently on my to-do list, you can go [here](https:/
 ## What is it?
 This is a Python Noodle Extensions Editor for Beat Saber levels. Manually editing a JSON file over a long period of time can get really annoying, so this should speed up the process!\
 ### The docs are still a work in progress. If you have any questions on how to use the script or need help, you can contact me on discord at `megamaz#1020`
-
+They currently do not document animation, but they can be found [here](./docs/docs.md)
 ## Sample
 ```py
 import noodleExtensions as NE
