@@ -21,7 +21,6 @@
 import json, os, copy
 from pathlib import Path
 from enum import Enum
-from .exceptions import *
 from .events import *
 from .objects import *
 
