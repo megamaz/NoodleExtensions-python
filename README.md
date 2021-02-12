@@ -53,7 +53,14 @@ I will not be accepting any form of pull request if the test files have not been
 4. If check 3 is done, move on to step 5
 5. Make the pull request
 ## Current Issues:
-None (Contact me at `megamaz#1020` if you run into any issues)
+- `info.dat` Will be cleared if there isn't a `_lastEditedBy` section (normally created by MMA2)\
+Current fix for that: Manually implement a `_customData` property inside the `info.dat`, which will contain a `_editors` section. Once added, it should look something like:
+```json
+. . .
+"_customData": {
+  "_editors":{}
+}
+```
 #### Currently testing features (checked features have been tested and are working)
 * [X] updateDependencies
 * [X] pushChanges
