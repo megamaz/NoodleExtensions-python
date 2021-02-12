@@ -24,7 +24,7 @@ from enum import Enum
 from .events import *
 from .objects import *
 
-version = "2.0.0"
+version = "2.0.1"
 PATHSWINDOWS = { # A list of internal Beat Saber download paths.
     "Steam":r"C:\Program Files (x86)\Steam\steamapps\common\Beat Saber",
     "Oculus":r"C:\OculusApps\Software\hyperbolic-magnematism-beat-saber"
@@ -140,6 +140,8 @@ class NoodleExtensions:
         infodatpath = "\\".join(infodatpath)
 
         infodat = json.load(open(infodatpath))
+        if infodat["_customData"].get("_editors") is None:
+            infodat["_customData"]["_editors"] = {}
         infodat["_customData"]["_editors"]["PNEE"] = {
             "version":version
         }

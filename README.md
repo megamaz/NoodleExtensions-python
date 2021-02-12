@@ -1,5 +1,5 @@
 # Python Noodle Extensions Editor (PNEE)
-Current Version: 2.0.0\
+Current Version: 2.0.1\
 Check your installed version by doing `pip show NoodleExtensions`. If you are not on 2.0.0, do `pip install --ugprade NoodleExtensions`.
 ```
 PPPPPPPPPPPPPPPPP   NNNNNNNN        NNNNNNNNEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
@@ -53,14 +53,8 @@ I will not be accepting any form of pull request if the test files have not been
 4. If check 3 is done, move on to step 5
 5. Make the pull request
 ## Current Issues:
-- `info.dat` Will be cleared if there isn't a `_lastEditedBy` section (normally created by MMA2)\
-Current fix for that: Manually implement a `_customData` property inside the `info.dat`, which will contain a `_editors` section. Once added, it should look something like:
-```json
-. . .
-"_customData": {
-  "_editors":{}
-}
-```
+- None
+
 #### Currently testing features (checked features have been tested and are working)
 * [X] updateDependencies
 * [X] pushChanges

@@ -7,7 +7,7 @@ long_description = (here / 'README.md').read_text(encoding='utf-8')
 
 setup(
     name="NoodleExtensions",
-    version="2.0.0",
+    version="2.0.1",
     license='MIT license',
     description="Edit Beat Saber Noodle Extensions level easily using this library.",
     long_description=long_description,
