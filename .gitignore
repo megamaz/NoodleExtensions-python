@@ -1,15 +1,13 @@
-*.json
-*.whl
-build
+# python defaults
 __pycache__
-main.spec
-examples/NoodleExtensions.py
-documentation.zip
-# testing files will be ignored
-test_pytest.py
-venv
-NoodleExtensions.egg-info
+
+# hide builds
 dist
-Releases
+build
+NoodleExtensions.egg-info
+main.spec
+
+# dev items
 .vscode
 *.bat
+venv
