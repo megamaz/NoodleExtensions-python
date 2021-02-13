@@ -34,7 +34,7 @@ class AnimateTrack:
         '''Construcs a new AnimateTrack object from a dictionary.'''
         return super().__init__(data["_time"], data["_data"]["_track"], data["_data"]["_duration"], **data["_data"])
 
-class AassignPathAnimation:
+class AssignPathAnimation:
     def __init__(self, beat, track, duration, **properties):
         '''an Assign Path Animation object which contains info on an assignPathAnimation event.\n
         `beat` - The beat at which the event should start.

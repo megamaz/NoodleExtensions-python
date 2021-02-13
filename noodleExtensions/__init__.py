@@ -265,7 +265,7 @@ class NoodleExtensions:
         return data.event
 
     
-    def assignPathAnimation(self, data:AassignPathAnimation):
+    def assignPathAnimation(self, data:AssignPathAnimation):
         '''Create a new AssignPathAnimation event. (Event will be overwritten if path is already being animated.)
         
         ### PARAMETERS
