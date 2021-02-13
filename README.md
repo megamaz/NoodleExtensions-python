@@ -1,6 +1,6 @@
 # Python Noodle Extensions Editor (PNEE)
 Current Version: 2.0.1\
-Check your installed version by doing `pip show NoodleExtensions`. If you are not on 2.0.0, do `pip install --ugprade NoodleExtensions`.
+Check your installed version by doing `pip show NoodleExtensions`. If you are not on 2.0.1, do `pip install --ugprade NoodleExtensions`.
 ```
 PPPPPPPPPPPPPPPPP   NNNNNNNN        NNNNNNNNEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
 P::::::::::::::::P  N:::::::N       N::::::NE::::::::::::::::::::EE::::::::::::::::::::E
