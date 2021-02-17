@@ -3,7 +3,7 @@ If you're having trouble understanding how to use the script, this should help y
 # Installation
 Before you start coding, you have to make sure that you have it installed.\
 If it's already installed:
-- `pip install --upgrade NoodleExtensions`\
+- `pip install --upgrade NoodleExtensions`
 <!---->
 If you do not have it installed;
 - `pip install NoodleExtensions`
@@ -41,7 +41,8 @@ _dissolaveArrow | `[amount, (0-1)time, easing]` | ✅ | ✅ | ❌
 _interactable | `[0/1, (0-1)time]` | ✅ | ✅ | ❌
 _time | `[lifespan, (0-1)time, easing]` | ✅ | ✅ | ❌
 _definitePosition | `[x, y, z, 0-1(time), easing]` | ❌ | ✅ | ❌
-
+The crosses above are not due to this script's limitation but to Noodle Extensions built-in limitations. 
+\
 Object properties
 Property | Usage | Note | Obstacle
 --- | --- | --- | ---
@@ -54,6 +55,7 @@ _interactable | True/False | ✅ | ✅
 # Objects
 Objects are data containers. You will need to create a few to use this script.
 - [`Note`](#note)
+- [`Obstacle`](#obstacle)
 ### Note
 A `Note` object which contains note data. The note does not have to exist inside the level.dat file. Custom data properties can be assigned normally.
 ```py
@@ -126,6 +128,11 @@ walls = editor.getWall(w)
 - [`getwall`](#getwall)
 - [`editnote`](#editnote)
 - [`editwall`](#editwall)
+- [`animateTrack`](#animeteTrack)
+- [`assignPathAnimation`](#assignPathAnimation)
+- [`assignTrackParent`](#assignTrackParent)
+- [`assignPlayerToTrack`](#assignPlayerToTrack)
+
 
 ### updateDependencies
 Adds requirements to the choosen level.dat. `Noodle Extensions` is automatically added. You will need to use this if you will be animating `_color`. It is not added automatically.\
@@ -235,5 +242,67 @@ It is heavily suggested when using `editWall` **to not change any form of defaul
 - `newWall` The wall's new data.
 - `checkForCustomData` [optional. defaults to False] if set to true, the `oldWall` will need to have matching customData. recommended to leave to False. once edited, changing the data will be complicated.
 
-# Questions? Something's not working?
-Let me know on discord. `megamaz#1020`! I'll be happy to help and answer any questions you have.
+### animateTrack
+Animate a track.
+```py
+import noodleExtensions as NE
+
+editor = NE.NoodleExtensions(r"Level.dat path")
+
+editor.animateTrack(NE.AnimateTrack(beat=10, track="animateTrackExample", duration=1, 
+    _position=[
+        [0, 0, 0, 0],
+        [0, 1, 0, 1]
+    ])) # dummy animation that moves the note up
+```
+If you think that it doesn't look fine enough and needs some tuning, as long as this function has the same beat and track, all other properties will be overwritten with the new data. This allows you to smoothly and easily change property animations.
+#### Arguments
+- `beat` The beat at which the animation starts.
+- `track` The track that will be animated
+- `duration` How long the animation should last
+- `_property` The properties you wish to animate. To know which ones are correct, refer to [event properties](#Custom-Data-Properties)
+
+### assignPathAnimation
+Assigns a path animation to the specified track. A path animation is lifespan based, and not beat based. This means that notes will be animated based off of how far they are from the player.
+```py
+import noodleExtensions as NE
+
+editor = NE.NoodleExtensions(r"Level.dat path")
+
+editor.assignPathAnimation(NE.AssignPathAnimation(beat=10, track="assignPathAnimationExample", duration=1, 
+    _position=[
+        [0, 0, 0, 0],
+        [0, 1, 0, 1]
+    ])) # dummy animation that moves the note up
+```
+If you think that it doesn't look fine enough and needs some tuning, as long as this function has the same beat and track, all other properties will be overwritten with the new data. This allows you to smoothly and easily change property animations.
+#### Arguments
+- `beat` The beat at which the animation starts.
+- `track` The track that will be animated
+- `duration` How long the animation should last
+- `_property` The properties you wish to animate. To know which ones are correct, refer to [event properties](#Custom-Data-Properties)
+### assignTrackParent
+Assigns a track to a parent track - which will make the children track follow and be affected the same way the parent track is affected.
+```py
+import noodleExtensions as NE
+
+editor = NE.NoodleExtensions(r"Level.dat path")
+
+editor.assignTrackParent(NE.AssignTrackParent(beat=1, tracks=["ChildrenTrack01", "ChildrenTrack02"], parentTrack="ParentTrack"))
+```
+#### Arguments
+- `beat` The beat at which the tracks should be assigned
+- `tracks` The tracks to assign
+- `parentTrack` The track that will be assigned to
+### assignPlayerToTrack
+Will assign the player to a track. Not all properties will affect the player. To know which properties will affect the player, review [Custom Data Properties](#custom-data-properties)
+```py
+import noodleExtensions as NE
+
+editor = NE.NoodleExtensions(r"Level.dat path")
+
+editor.assignPlayerToTrack(NE.AssignPlayerToTrack(beat=1, track="PlayerTrack"))
+```
+#### Arguments
+- `beat` The beat at which the player will be assigned.
+- `track` The track to which the playyer will be assigned.
