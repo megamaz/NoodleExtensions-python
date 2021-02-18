@@ -41,6 +41,7 @@ _dissolaveArrow | `[amount, (0-1)time, easing]` | ✅ | ✅ | ❌
 _interactable | `[0/1, (0-1)time]` | ✅ | ✅ | ❌
 _time | `[lifespan, (0-1)time, easing]` | ✅ | ✅ | ❌
 _definitePosition | `[x, y, z, 0-1(time), easing]` | ❌ | ✅ | ❌
+<!--END AREA-->
 The crosses above are not due to this script's limitation but to Noodle Extensions built-in limitations. 
 \
 Object properties
