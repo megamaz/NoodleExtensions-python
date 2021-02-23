@@ -1,24 +1,9 @@
 # Python Noodle Extensions Editor (PNEE)
 Current Version: 2.0.2\
-Check your installed version by doing `pip show NoodleExtensions`. If you are not on 2.0.2, do `pip install --ugprade NoodleExtensions`.
-```
-PPPPPPPPPPPPPPPPP   NNNNNNNN        NNNNNNNNEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
-P::::::::::::::::P  N:::::::N       N::::::NE::::::::::::::::::::EE::::::::::::::::::::E
-P::::::PPPPPP:::::P N::::::::N      N::::::NE::::::::::::::::::::EE::::::::::::::::::::E
-PP:::::P     P:::::PN:::::::::N     N::::::NEE::::::EEEEEEEEE::::EEE::::::EEEEEEEEE::::E
-  P::::P     P:::::PN::::::::::N    N::::::N  E:::::E       EEEEEE  E:::::E       EEEEEE
-  P::::P     P:::::PN:::::::::::N   N::::::N  E:::::E               E:::::E             
-  P::::PPPPPP:::::P N:::::::N::::N  N::::::N  E::::::EEEEEEEEEE     E::::::EEEEEEEEEE   
-  P:::::::::::::PP  N::::::N N::::N N::::::N  E:::::::::::::::E     E:::::::::::::::E   
-  P::::PPPPPPPPP    N::::::N  N::::N:::::::N  E:::::::::::::::E     E:::::::::::::::E   
-  P::::P            N::::::N   N:::::::::::N  E::::::EEEEEEEEEE     E::::::EEEEEEEEEE   
-  P::::P            N::::::N    N::::::::::N  E:::::E               E:::::E             
-  P::::P            N::::::N     N:::::::::N  E:::::E       EEEEEE  E:::::E       EEEEEE
-PP::::::PP          N::::::N      N::::::::NEE::::::EEEEEEEE:::::EEE::::::EEEEEEEE:::::E
-P::::::::P          N::::::N       N:::::::NE::::::::::::::::::::EE::::::::::::::::::::E
-P::::::::P          N::::::N        N::::::NE::::::::::::::::::::EE::::::::::::::::::::E
-PPPPPPPPPP          NNNNNNNN         NNNNNNNEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
-```
+Check your installed version by doing `pip show NoodleExtensions`. If you are not on 2.0.2, do `pip install --ugprade NoodleExtensions`.<br/>
+<br/>
+
+![PNEE](./assets/PNEE.png)
 ## my to-do list
 If you want to know what's currently on my to-do list, you can go [here](https://trello.com/b/yA5qQTs7)! Pull requests, feedback, issues, and more are appreciated. If you'd like to contact me, you can do so on discord at `megamaz#1020`
 ## What is it?
