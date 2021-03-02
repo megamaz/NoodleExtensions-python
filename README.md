@@ -8,8 +8,9 @@ Check your installed version by doing `pip show NoodleExtensions`. If you are no
 If you want to know what's currently on my to-do list, you can go [here](https://trello.com/b/yA5qQTs7)! Pull requests, feedback, issues, and more are appreciated. If you'd like to contact me, you can do so on discord at `megamaz#1020`
 ## What is it?
 This is a Python Noodle Extensions Editor for Beat Saber levels. Manually editing a JSON file over a long period of time can get really annoying, so this should speed up the process!\
-### Documentation
-All the docs can be found [here](./docs/docs.md)! If something does not work or they are incorrect, or do not document something, let me know!
+### Links
+- [Wiki](https://github.com/megamaz/Python-Noodle-Extensions-Editor/wiki)
+- [Discord](https://discord.com/invite/gut3CW7AX7)
 ## Sample
 ```py
 import noodleExtensions as NE
