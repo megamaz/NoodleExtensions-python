@@ -66,6 +66,7 @@ class Obstacle:
         self._lineIndex = index
         self._type = type
         self._duration = duration
+        self._width = width
         self._customData = customData
         
     @classmethod

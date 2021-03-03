@@ -18,13 +18,14 @@
 # Python Noodle Extensions Editor. (Great name, I know.) I can't do ASCII, so I used http://patorjk.com/software/taag/#p=testall&h=0&v=0&f=Alpha&t=PNEE "Doh" (Pronounced the same as Knee, /nē/)
 # This code is awful. Please improve it.
 
-import json, os, copy
+import json, copy
 from pathlib import Path
 from enum import Enum
 from .events import *
 from .objects import *
 
-version = "2.0.1"
+version = "2.0.3"
+
 PATHSWINDOWS = { # A list of internal Beat Saber download paths.
     "Steam":r"C:\Program Files (x86)\Steam\steamapps\common\Beat Saber",
     "Oculus":r"C:\OculusApps\Software\hyperbolic-magnematism-beat-saber"
