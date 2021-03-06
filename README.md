@@ -39,7 +39,7 @@ I will not be accepting any form of pull request if the test files have not been
 4. If check 3 is done, move on to step 5
 5. Make the pull request
 ## Current Issues:
-- None
+- using editNote/editWall multiple times on the same notes/blocks will clear the current `_customData`
 
 #### Currently testing features (checked features have been tested and are working)
 * [X] updateDependencies
