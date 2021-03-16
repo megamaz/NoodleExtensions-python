@@ -1,5 +1,5 @@
 class Note:
-    def __init__(self, beat, index, layer, type, cutDirection, **customData):
+    def __init__(self, _time, _lineIndex, _lineLayer, _type, _cutDirection, **_customData):
         '''a note object which contains info on a note.\n
         `beat` - The beat of the note.\n
         `index` - The lineIndex of the note\n
@@ -9,37 +9,33 @@ class Note:
         `customData` - The note's custom data\n
         '''
         newNote = {
-            "_time":beat,
-            "_lineIndex":index,
-            "_lineLayer":layer,
-            "_type":type,
-            "_cutDirection":cutDirection
+            "_time":_time,
+            "_lineIndex":_lineIndex,
+            "_lineLayer":_lineLayer,
+            "_type":_type,
+            "_cutDirection":_cutDirection
         }
 
-        if customData != {}:
-            newNote["_customData"] = customData
+        if _customData != {}:
+            newNote["_customData"] = _customData
         
         self.note = newNote
 
-        self._time = beat
-        self._lineIndex = index
-        self._lineLayer = layer
-        self._type = type
-        self._cutDirection = cutDirection
-        self._customData = customData
+        self._time = _time
+        self._lineIndex = _lineIndex
+        self._lineLayer = _lineLayer
+        self._type = _type
+        self._cutDirection = _cutDirection
+        self._customData = _customData
         
     @classmethod # allows to call method without needing to call __init__
     def fromDict(cls, data:dict):
         '''Will return a Note object from a note dict data.'''
-        if data.get("_customData") is None: # fixing index error
-            noteObjFromDict = cls(data["_time"], data["_lineIndex"], data["_lineLayer"], data["_type"], data["_cutDirection"])
-        else:
-            noteObjFromDict = cls(data["_time"], data["_lineIndex"], data["_lineLayer"], data["_type"], data["_cutDirection"], **data["_customData"])
-
+        noteObjFromDict = cls(**data)
         return noteObjFromDict
 
 class Obstacle:
-    def __init__(self, beat, index, type, duration, width, **customData):
+    def __init__(self, _time, _lineIndex, _type, _duration, _width, **_customData):
         '''a note object which contains info on a note.\n
         `beat` - The start beat of the wall.\n
         `index` - The starting left position of the wall.\n
@@ -49,32 +45,27 @@ class Obstacle:
         `customData` - The note's custom data\n
         '''
         newWall = {
-            "_time":beat,
-            "_lineIndex":index,
-            "_type":type,
-            "_duration":duration,
-            "_width":width,
-            "_customData":{}
+            "_time":_time,
+            "_lineIndex":_lineIndex,
+            "_type":_type,
+            "_duration":_duration,
+            "_width":_width
         }
 
-        if customData != {}:
-            newWall["_customData"] = customData
+        if _customData != {}:
+            newWall["_customData"] = _customData
         
         self.obstacle = newWall
 
-        self._time = beat
-        self._lineIndex = index
-        self._type = type
-        self._duration = duration
-        self._width = width
-        self._customData = customData
+        self._time = _time
+        self._lineIndex = _lineIndex
+        self._type = _type
+        self._duration = _duration
+        self._width = _width
+        self._customData = _customData
         
     @classmethod
     def fromDict(cls, data:dict):
         '''Will return a Obstacle object from dict data.'''
-        if data.get("_customData") is None:
-            noteObjFromDict = cls(data["_time"], data["_lineIndex"], data["_type"], data["_duration"], data["_width"])
-        else:
-            noteObjFromDict = cls(data["_time"], data["_lineIndex"], data["_type"], data["_duration"], data["_width"], **data["_customData"])
-
+        noteObjFromDict = cls(**data)
         return noteObjFromDict
