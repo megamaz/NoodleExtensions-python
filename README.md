@@ -1,6 +1,17 @@
+# IF YOU ARE LOOKING TO MAKE A NOODLE EXTENSIONS LEVEL
+please whatever you do DO NOT USE THIS. This is *bad*. A few more notes before you leave though;
+- This requires that you have some python experience.
+- This is bad.
+- If you have python experience, I heavily suggest you use [this](https://github.com/megamaz/python-noodleExtensions-demojs) instead. It is a copy of the demo.js in python, which is much better than this.
+- If you'd rather use this, I have a few other things to say:
+  - dont
+  - If you *really* wanna use this, then I assume you have python experience. Enough to understand how the script works.
+  - Since it's absolute trash, I will not be giving out any more support.
+  - I will be finishing the [Wiki](https://github.com/megamaz/Python-Noodle-Extensions-Editor/wiki). However, if something does not make sense, do not count on me to help you with it.
+  - Good luck.
 # Python Noodle Extensions Editor (PNEE)
-Current Version: 2.0.3\
-Check your installed version by doing `pip show NoodleExtensions`. If you are not on 2.0.3, do `pip install --ugprade NoodleExtensions`.<br/>
+Current Version: 2.1.0\
+Check your installed version by doing `pip show NoodleExtensions`. If you are not on 2.1.0, do `pip install --ugprade NoodleExtensions`.<br/>
 <br/>
 
 ![PNEE](./assets/PNEE.png)
@@ -10,7 +21,7 @@ If you want to know what's currently on my to-do list, you can go [here](https:/
 This is a Python Noodle Extensions Editor for Beat Saber levels. Manually editing a JSON file over a long period of time can get really annoying, so this should speed up the process!\
 ### Links
 - [Wiki](https://github.com/megamaz/Python-Noodle-Extensions-Editor/wiki)
-- [Discord](https://discord.com/invite/gut3CW7AX7)
+- ~~Discord~~
 ## Sample
 ```py
 import noodleExtensions as NE
